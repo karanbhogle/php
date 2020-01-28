@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Practitioner 2</title>
+</head>
+<body>
+<form method="POST" action="index.php" enctype="multipart/form-data">
+    <div id="mainContainer">
+        <h1>Practitioner Registration Form</h1>
+        <span class="error"> * is a required field.</span>
+        
+        <fieldset>
+            <legend><strong>Account Details</strong></legend>
+            <div class="divAccount">
+                <div>
+                    <label>Prefix</label>
+                    <select name="account['prefix]'">
+                       <?php $prefixArray = ["Mr", "Miss", "Mrs", "Ms", "Dr"];?>
+                       <?php foreach($prefixArray as $prefix): ?>
+                            <option value="<?= $prefix?>"><?= $prefix?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</form>
+</body>
+</html>

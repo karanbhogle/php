@@ -23,12 +23,9 @@ class Calendar{
         <tr>
             <td>
             <?php 
-                $location = "images/" . $_FILES["picCalendarCover"]["name"];
-                if(move_uploaded_file($_FILES["picCalendarCover"]["tmp_name"], $location)){
+                @$location = "images/" . $_FILES["picCalendarCover"]["name"];
+                if(move_uploaded_file(@$_FILES["picCalendarCover"]["tmp_name"], $location)){
                     echo "<img src='".$location."' height=200 width=300 />";
-                } 
-                else{
-                    echo "Error !!";
                 }
             ?>
             </td>

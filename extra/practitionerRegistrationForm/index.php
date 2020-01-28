@@ -243,7 +243,7 @@
             </table>
         </fieldset>
 
-        <input type="checkbox" name="checkboxShowOtherInfo" id="checkboxShowOtherInfo" onclick="toggleOtherInfo()" value="otherToggle" <?php if(isset($_POST['btnSubmit'])){if(@$_POST['checkboxShowOtherInfo'] == "otherToggle"){echo "selected";}} ?>> Show Other Information<br>
+        <input type="checkbox" name="checkboxShowOtherInfo" id="checkboxShowOtherInfo" onclick="toggleOtherInfo()" value="otherToggle"> Show Other Information<br>
         <div id="otherInfo" style="display:none">
         <fieldset>
             <legend><strong>Other Information</strong></legend>

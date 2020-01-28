@@ -27,8 +27,7 @@
 <form method="POST" action="index.php" enctype="multipart/form-data">
     <div id="mainContainer">
         <h1>Practitioner Registration Form</h1>
-        <span class="error"> * is a required field.</span>
-        
+        <span class='error'> * is a required field.<br></span>
         <div id="divAccount">
             <fieldset>
                 <legend><strong>Account Details</strong></legend>
@@ -50,6 +49,7 @@
                     </div>
                     <div class="col-75">
                         <input type="text" id="txtFirstName" name="account[txtFirstName]" value="<?php echo getValue('account', 'txtFirstName'); ?>">
+                        <span class = "error">* <?php if(isset($_POST['btnSubmit'])){echo $firstNameError;}?></span>
                     </div>
 
                     <div>
@@ -58,6 +58,7 @@
                         </div>
                         <div class="col-75">
                             <input type="text" id="txtLastName" name="account[txtLastName]" value="<?php echo getValue('account', 'txtLastName') ?>">
+                            <span class = "error">* <?php if(isset($_POST['btnSubmit'])){echo $lastNameError;}?></span>
                         </div>    
                     </div>
 
@@ -76,6 +77,7 @@
                         </div>
                         <div class="col-75">
                             <input type="text" name="account[txtPhoneNumber]" value="<?php echo getValue('account', 'txtPhoneNumber') ?>">
+                            <span class = "error">* <?php if(isset($_POST['btnSubmit'])){echo $phoneNumberError;}?></span>
                         </div>    
                     </div>
 
@@ -85,6 +87,7 @@
                         </div>
                         <div class="col-75">
                             <input type="text" name="account[txtEmail]" value="<?php echo getValue('account', 'txtEmail') ?>">
+                            <span class = "error">* <?php if(isset($_POST['btnSubmit'])){echo $emailError;}?></span>
                         </div>    
                     </div>
 
@@ -103,6 +106,7 @@
                         </div>
                         <div class="col-75">
                             <input type="text" name="account[txtConfirmPassword]" value="<?php echo getValue('account', 'txtConfirmPassword') ?>">
+                            <span class = "error">* <?php if(isset($_POST['btnSubmit'])){echo $passwordError;}?></span>
                         </div>    
                     </div>
             </fieldset>    
@@ -118,6 +122,7 @@
                     </div>
                     <div class="col-75">
                         <input type="text" name="address[txtAddressLine1]" value="<?php echo getValue('address', 'txtAddressLine1') ?>">
+                        <span class = "error">* <?php if(isset($_POST['btnSubmit'])){echo $addressLine1Error;}?></span>
                     </div>    
                     
                     <div class="col-25">
@@ -125,6 +130,7 @@
                     </div>
                     <div class="col-75">
                         <input type="text" name="address[txtAddressLine2]" value="<?php echo getValue('address', 'txtAddressLine2') ?>">
+                        <span class = "error">* <?php if(isset($_POST['btnSubmit'])){echo $addressLine2Error;}?></span>
                     </div>
 
                     <div>
@@ -166,6 +172,7 @@
                                 <option value="<?= $country?>" <?= $selectedCountry ?> ><?= $country?></option>
                                 <?php endforeach; ?>
                             </select>
+                            <span class = "error">* <?php if(isset($_POST['btnSubmit'])){echo $countryError;}?></span>
                         </div>    
                     </div>
 
@@ -175,6 +182,7 @@
                         </div>
                         <div class="col-75">
                             <input type="text" name="address[txtPostalCode]" value="<?php echo getValue('address', 'txtPostalCode') ?>">
+                            <span class = "error">* <?php if(isset($_POST['btnSubmit'])){echo $postalCodeError;}?></span>
                         </div>    
                     </div>
             </fieldset>    
@@ -185,18 +193,24 @@
         <div id="divOtherInfo" style="display:none">
             <fieldset>
                 <legend><strong>Other Information</strong></legend>
-                    <div class="col-25">
-                        <label>Describe Yourself</label>
+                    <div>
+                        <div class="col-25">
+                            <label>Describe Yourself</label>
+                        </div>
+                        <div class="col-75">
+                            <textarea name="otherInfo[txtareaDescribeYourself]" rows="5" cols="30"><?php echo getValue('otherInfo', 'txtareaDescribeYourself') ?></textarea>
+                            <span class = "error">* <?php if(isset($_POST['btnSubmit'])){echo $describeYourselfError;}?></span>
+                        </div>    
                     </div>
-                    <div class="col-75">
-                        <textarea name="otherInfo[txtareaDescribeYourself]" rows="5" cols="30"><?php echo getValue('otherInfo', 'txtareaDescribeYourself') ?></textarea>
-                    </div>    
-                    
-                    <div class="col-25">
-                        <label>Profile Image</label>
-                    </div>
-                    <div class="col-75">
-                        <input type="file" name="otherInfo[fileProfileImage]">
+
+                    <div>
+                        <div class="col-25">
+                            <label>Profile Image</label>
+                        </div>
+                        <div class="col-75">
+                            <input type="file" name="fileProfileImage">
+                            <span class = "error"><?php if(isset($_POST['btnSubmit'])){echo $imageError;}?></span>
+                        </div>
                     </div>
 
                     <div>
@@ -204,7 +218,8 @@
                             <label>Certificate Upload</label>
                         </div>
                         <div class="col-75">
-                            <input type="file" name="otherInfo[fileCertificatePDF]">
+                            <input type="file" name="fileCertificatePDF">
+                            <span class = "error"><?php if(isset($_POST['btnSubmit'])){echo $certificateError;}?></span>
                         </div>    
                     </div>
 
@@ -246,6 +261,7 @@
                                 <?php $selectedTouch = array_intersect(getValue('otherInfo', 'checkboxTouch', []),[$touchMethod]) ? "checked":""; ?>
                                 <input type="checkbox" name="otherInfo[checkboxTouch][]" value="<?= $touchMethod?>" <?= $selectedTouch ?> ><?= $touchMethod?>
                                 <?php endforeach; ?>
+                            <span class = "error">* <?php if(isset($_POST['btnSubmit'])){echo $howToTouchError;}?></span>
                         </div>    
                     </div>
 

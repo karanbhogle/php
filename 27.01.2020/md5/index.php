@@ -4,6 +4,7 @@ if(isset($_POST['btnSubmit'])){
     if(!empty($_POST['txtPassword']) && !empty($_POST['txtConfirmPassword'])){
         $password = md5($_POST['txtPassword']);
         $confirmPassword = md5($_POST['txtConfirmPassword']);
+        $md5Password = md5($password);
 
         echo "<br><b>Password: </b>".$password.' & <b>Confirm Password: </b>'.$confirmPassword;
 
@@ -13,6 +14,7 @@ if(isset($_POST['btnSubmit'])){
         else{
             echo "<br>Password and Confirm Passwords are different<br><br>";
         }
+        echo "<br><br><br>".$md5Password;
     }
 }
 

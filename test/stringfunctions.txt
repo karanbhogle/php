@@ -1,0 +1,12 @@
+2. explode($delimeter, $string);
+
+This function takes two parameters: a delimeter and a string respectively.
+The delimeter is searched in the entire string is separated as different elements and return a string.
+
+For ex.
+$string = "THIS IS A   STRING";
+$newArray = explode(" ",$string);
+print_r($newArray);
+
+$newArray will have ["THIS","IS","A","","","STRING"]
+

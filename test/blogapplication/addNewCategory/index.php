@@ -31,15 +31,21 @@ if(!isset($_SESSION['currentUser'])){
 }
 
 if(isset($_POST['buttonAddCategory'])){
-        $cleanCategoryArray = getCleanCategoryArray();
-        insertValidData('');
-        header("location:../homepage/");
-    }
+    insertValidCategoryData();
+    header("location:../category/");
 }
 
+if(isset($_GET['toBeUpdated'])){
+    $_SESSION['categoryId'] = $_GET['toBeUpdated'];
+}
+
+if(isset($_POST['buttonUpdateCategory'])){
+    updateValidCategoryData();
+    header("location:../category/");
+}
 ?>
 
-<form action="index.php" method="POST">
+<form action="index.php" method="POST" enctype="multipart/form-data">
 <div id="divRegister">
     <h1>Add New Category</h1>
 
@@ -47,7 +53,7 @@ if(isset($_POST['buttonAddCategory'])){
         <label>Title</label>
     </div>
     <div class="col-75">
-        <input type="text" name="category[txtCategoryTitle]" value="<?php echo getValue('category', 'txtCategoryTitle'); ?>">
+        <input type="text" name="category[txtCategoryTitle]" value="<?php echo getCategoryValue('category', 'txtCategoryTitle'); ?>">
     </div>
 
     <div>
@@ -55,7 +61,7 @@ if(isset($_POST['buttonAddCategory'])){
             <label>Content</label>
         </div>
         <div class="col-75">
-            <textarea name="category[txtareaContent]" rows="5" cols="30"><?php echo getValue('category', 'txtareaContent') ?></textarea>
+            <textarea name="category[txtareaContent]" rows="5" cols="30"><?php echo getCategoryValue('category', 'txtareaContent') ?></textarea>
         </div>    
     </div>
 
@@ -64,7 +70,7 @@ if(isset($_POST['buttonAddCategory'])){
             <label>URL</label>
         </div>
         <div class="col-75">
-            <input type="text" name="category[txtURL]" value="<?php echo getValue('category', 'txtURL') ?>">
+            <input type="text" name="category[txtURL]" value="<?php echo getCategoryValue('category', 'txtURL') ?>">
         </div>    
     </div>
 
@@ -73,7 +79,7 @@ if(isset($_POST['buttonAddCategory'])){
             <label>Meta Title</label>
         </div>
         <div class="col-75">
-            <input type="text" name="category[txtMetaTitle]" value="<?php echo getValue('category', 'txtMetaTitle') ?>">
+            <input type="text" name="category[txtMetaTitle]" value="<?php echo getCategoryValue('category', 'txtMetaTitle') ?>">
         </div>    
     </div>
 
@@ -82,7 +88,14 @@ if(isset($_POST['buttonAddCategory'])){
             <label>Parent Category</label>
         </div>
         <div class="col-75">
-            <input type="text" name="category[txtParentCategory]" value="<?php echo getValue('category', 'txtParentCategory') ?>">
+            <select name="category[selectCategory]">
+                        <option value=''></option>
+                <?php $categoriesArray = getAllCategories();?>
+                    <?php foreach($categoriesArray as $category): ?>
+                        <?php $selectedCategory = in_array(getCategoryValue('category', 'selectCategory'),[$category]) ? "selected":""; ?>
+                        <option value="<?= $category?>" <?= $selectedCategory ?> ><?= $category?></option>
+                    <?php endforeach; ?>
+            </select>
         </div>    
     </div>
 
@@ -96,7 +109,8 @@ if(isset($_POST['buttonAddCategory'])){
     </div>
 
     <div>
-        <input type="submit" id="buttonAddCategory" name="buttonAddCategory">
+        <input type="submit" id="buttonAddCategory" name="<?php echo getCategorySubmitName();?>" value="<?php echo getCategorySubmitValue();?>">
+        <a href="/cybercom/extra/blogapplication/category/">Back to Categories</a>
     </div>
 </div>            
 </form>

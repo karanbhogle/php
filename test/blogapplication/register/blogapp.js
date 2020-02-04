@@ -1,5 +1,5 @@
 function toggleTermsAndConditions(){
-    let buttonRegister = document.getElementById('buttonRegister');
+    let buttonRegister = document.getElementById('btnRegister');
     let checkboxTermsAndConditions = document.getElementById('checkboxTerms&Conditions');
 
     if(checkboxTermsAndConditions.checked == true){

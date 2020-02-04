@@ -24,10 +24,28 @@
 
 <?php
 session_start();
-require_once '../regfunctions.php';
+require_once '../addfunctions.php';
 
 if(!isset($_SESSION['currentUser'])){
     header("location:../");
+}
+
+if(isset($_POST['buttonAddBlog'])){
+    $status = insertValidBlogData();
+    if($status == "inserted"){
+        header("location:../homepage");
+    }
+    else{
+        echo $status;
+    }
+}
+
+if(isset($_GET['toBeUpdated'])){
+    $_SESSION['blogId'] = $_GET['toBeUpdated'];
+}
+
+if(isset($_POST['buttonUpdateBlog'])){
+    updateValidBlogData();
 }
 
 ?>
@@ -40,7 +58,7 @@ if(!isset($_SESSION['currentUser'])){
         <label>Title</label>
     </div>
     <div class="col-75">
-        <input type="text" name="blog[txtBlogTitle]" value="<?php echo getValue('blog', 'txtBlogTitle'); ?>">
+        <input type="text" name="blog[txtBlogTitle]" value="<?php echo getBlogValue('blog', 'txtBlogTitle'); ?>">
     </div>
 
     <div>
@@ -48,7 +66,7 @@ if(!isset($_SESSION['currentUser'])){
             <label>Content</label>
         </div>
         <div class="col-75">
-            <textarea name="blog[txtareaContent]" rows="5" cols="30"><?php echo getValue('blog', 'txtareaContent') ?></textarea>
+            <textarea name="blog[txtareaContent]" rows="5" cols="30"><?php echo getBlogValue('blog', 'txtareaContent') ?></textarea>
         </div>    
     </div>
 
@@ -57,7 +75,7 @@ if(!isset($_SESSION['currentUser'])){
             <label>URL</label>
         </div>
         <div class="col-75">
-            <input type="text" name="blog[txtURL]" value="<?php echo getValue('blog', 'txtURL') ?>">
+            <input type="text" name="blog[txtURL]" value="<?php echo getBlogValue('blog', 'txtURL') ?>">
         </div>    
     </div>
 
@@ -66,7 +84,7 @@ if(!isset($_SESSION['currentUser'])){
             <label>Published At</label>
         </div>
         <div class="col-75">
-            <input type="date" name="blog[datePublishedOn]" value="<?php echo getValue('blog', 'datePublishedOn') ?>">
+            <input type="date" name="blog[datePublishedOn]" value="<?php echo getBlogValue('blog', 'datePublishedOn') ?>">
         </div>    
     </div>
 
@@ -75,25 +93,14 @@ if(!isset($_SESSION['currentUser'])){
             <label>Category</label>
         </div>
         <div class="col-75">
-            <input type="text" name="blog[txtCategory]" value="<?php echo getValue('blog', 'txtCategory') ?>">
-        </div>    
-    </div>
-
-    <div>
-        <div class="col-25">
-            <label>Meta Title</label>
-        </div>
-        <div class="col-75">
-            <input type="text" name="blog[txtMetaTitle]" value="<?php echo getValue('blog', 'txtMetaTitle') ?>">
-        </div>    
-    </div>
-
-    <div>
-        <div class="col-25">
-            <label>Parent Category</label>
-        </div>
-        <div class="col-75">
-            <input type="text" name="blog[txtParentCategory]" value="<?php echo getValue('blog', 'txtParentCategory') ?>">
+            <select name="blog[selectCategory]">
+                        <option value=''></option>
+                <?php $categoriesArray = getAllCategories();?>
+                    <?php foreach($categoriesArray as $category): ?>
+                        <?php $selectedCategory = in_array(getBlogValue('blog', 'selectCategory'),[$category]) ? "selected":""; ?>
+                        <option value="<?= $category?>" <?= $selectedCategory ?> ><?= $category?></option>
+                    <?php endforeach; ?>
+            </select>
         </div>    
     </div>
 
@@ -107,7 +114,8 @@ if(!isset($_SESSION['currentUser'])){
     </div>
 
     <div>
-        <input type="submit" id="buttonAddBlog" name="buttonAddBlog">
+        <input type="submit" name="<?php echo getBlogSubmitName(); ?>" value="<?php echo getBlogSubmitValue(); ?>">
+        <a href="/cybercom/extra/blogapplication/homepage/">Back to Blog Posts</a>
     </div>
 </div>            
 </form>

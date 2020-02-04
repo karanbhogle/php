@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Blog Posts: Blog Application</title>
+    <title>Category: Blog Application</title>
     <style>
         .mainContainer{
             border:1px solid black;
@@ -27,6 +27,7 @@
             width:1000px;
             text-align:center;
         }
+
         .btnClass {
             box-shadow: 0px 0px 0px 2px #9fb4f2;
             background:linear-gradient(to bottom, #7892c2 5%, #476e9e 100%);
@@ -60,23 +61,24 @@ if(!isset($_SESSION['currentUser'])){
     header("location:../");
 }
 
-if(isset($_SESSION['currentUser']) && isset($_POST['btnManageCategory'])){
-    header("location:../category/");
-}
 
-if(isset($_SESSION['currentUser']) && isset($_POST['btnAddBlogPost'])){
-    if(isset($_SESSION['blogId'])){
-        unset($_SESSION['blogId']);
+if(isset($_SESSION['currentUser']) && isset($_POST['btnAddCategory'])){
+    if(isset($_SESSION['categoryId'])){
+        unset($_SESSION['categoryId']);
     }
-    header("location:../addBlogPost/");
+    header("location:../addNewCategory/");
 }
 
 if(isset($_SESSION['currentUser']) && isset($_POST['btnMyProfile'])){
     header("location:../register/");
 }
+
+if(isset($_SESSION['currentUser']) && isset($_POST['btnHomepage'])){
+    header("location:../homepage/");
+}
 if(isset($_GET['toBeDeleted'])){
     require_once '../database/DB.php';
-    $deleteQuery = "DELETE FROM blog_post WHERE blog_post_id=".$_GET['toBeDeleted'];
+    $deleteQuery = "DELETE FROM category WHERE category_id=".$_GET['toBeDeleted'];
 
     $deleteBlogObj = new DB();
     $deleteBlogObj->deleteData($deleteQuery);
@@ -93,14 +95,14 @@ if(isset($_POST['btnLogout'])){
 <form action="index.php" method="POST">
 <div class="mainContainer">
         <div class="topLeft">
-            <input type="submit" class="btnClass" name="btnManageCategory" value="Manage Category">
+            <input type="submit" class="btnClass" name="btnHomepage" value="Display Blogs">
             <input type="submit" class="btnClass" name="btnMyProfile" value="My Profile">
             <input type="submit" class="btnClass" name="btnLogout" value="Log Out">
         </div>
 
         <div>
-            <h2>Blog Posts</h2>
-            <input type="submit" name="btnAddBlogPost" value="Add Blog Post">
+            <h2>Blog Category</h2>
+            <input type="submit" name="btnAddCategory" value="Add Category">
         </div>
 
         <div>
@@ -132,20 +134,19 @@ function displayTableHeader(){
         echo " ";
     }
     else{
-        $columns = array_keys(mysqli_fetch_assoc($result));
-        for($i = 0; $i < sizeof($columns); $i++){
+        $columns = @array_keys(mysqli_fetch_assoc($result));
+        for($i = 0; $i < @sizeof($columns); $i++){
             echo '<th>'.$columns[$i].'</th>';
         }
         echo '<th>Actions</th>';
     }
-    
 }
 
 function displayTableRows(){
     global $result;
     $result = getResultData();
     if(mysqli_num_rows($result) <= 0){
-        echo "<h3>Your newly added Blog Post will appear here.</h3>";
+        echo "Your newly added categories will appear here";
     }
     else{
         while($row = mysqli_fetch_row($result)){
@@ -153,10 +154,14 @@ function displayTableRows(){
             if(sizeof($row) > 0){
                 echo '<tr>';
                 for($i = 0; $i < sizeof($row); $i++){
+                    if($i == 1){
+                        echo '<td><img src="../uploaded/categoryimage/'.$row[$i].'" width=100 height=70></td>';
+                        continue;
+                    }
                     echo '<td>'.$row[$i].'</td>';
                 }
                 echo '<td>';
-                    echo '<a href="/cybercom/extra/blogapplication/addBlogPost/index.php?toBeUpdated='.$row[0].'">Update</a>'.'&nbsp;&nbsp;';
+                    echo '<a href="/cybercom/extra/blogapplication/addNewCategory/index.php?toBeUpdated='.$row[0].'">Update</a>'.'&nbsp;&nbsp;';
                     echo '<a href="index.php?toBeDeleted='.$row[0].'">Delete</a>';
                 echo '</td>';
                 echo '</tr>';
@@ -170,12 +175,11 @@ function displayTableRows(){
 
 function getResultData(){
     $selectQuery = 'SELECT 
-                    blog_post_id PostID,
-                    blog_post_category "Category Name",
-                    blog_post_title Title,
-                    blog_post_publishedat "Published Date"
-                FROM blog_post 
-                WHERE blog_post_user_id='.$_SESSION['currentUser'];
+                    category_id "Category ID",
+                    category_image "Category Image",
+                    category_title "Category Name",
+                    category_createdat "Created Date"
+                FROM category';
     $selectObj = new DB();
     $result = $selectObj->fetchData($selectQuery);
     return $result;

@@ -25,7 +25,7 @@
 <?php
 session_start();
 require_once '../regfunctions.php';
-if(isset($_POST['buttonRegister'])){
+if(isset($_POST['btnRegister'])){
     $validatedStatus = validateData();
 
     if($validatedStatus == "ok"){

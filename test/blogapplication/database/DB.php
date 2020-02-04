@@ -18,16 +18,21 @@ class DB{
         $valueString = "'".implode("','",$values)."'";
 
         $insertQueryString = "INSERT INTO ".$tableName."(".$columnString.") VALUES(".$valueString.")";
-        
+
         $result = mysqli_query($this->connectionObj, $insertQueryString);
-        $last_id = mysqli_insert_id($this->connectionObj);
-        return $last_id;
+        if(!$result){
+            return mysqli_error($this->connectionObj);
+        }
+        return "inserted";
     }
 
     function checkUserLoginDetails($email, $password){
         $loginQueryString = "SELECT user_id from user WHERE user_email='".$email."' AND user_password='".$password."'";
         $result = mysqli_query($this->connectionObj, $loginQueryString);
         
+        if(!$result){
+            echo mysqli_error($this->connectionObj);
+        }
         $rowcount=mysqli_num_rows($result);
         if($rowcount > 0){
             while ($row = $result -> fetch_row()) {
@@ -41,20 +46,51 @@ class DB{
 
     function fetchData($selectQueryString){
         $result = mysqli_query($this->connectionObj, $selectQueryString);
+        if(!$result){
+            echo mysqli_error($this->connectionObj);
+        }
         return $result;
     }
 
     function updateData($updateQueryString){
         $updateQueryString .= " ";
         $result = mysqli_query($this->connectionObj, $updateQueryString);
+        if(!$result){
+            echo mysqli_error($this->connectionObj);
+        }
         return $result;
     }
 
     function updateLastLogin(){
         $updateLastLoginQueryString = "UPDATE user SET user_lastlogin='".$_SESSION['currentUserLastLoggedIn']."' WHERE user_id=".$_SESSION['currentUser'];
-        echo $updateLastLoginQueryString;
         $result = mysqli_query($this->connectionObj, $updateLastLoginQueryString);
+        if(!$result){
+            echo mysqli_error($this->connectionObj);
+        }
         return $result;
+    }
+
+    function deleteData($deleteQueryString){
+        $result = mysqli_query($this->connectionObj, $deleteQueryString);
+        if(!$result){
+            echo mysqli_error($this->connectionObj);
+        }
+        return $result;
+    }
+    
+    function getAllCategoriesTitle(){
+        $getCategoriesQueryString = "SELECT category_title from category";
+        $result = mysqli_query($this->connectionObj, $getCategoriesQueryString);
+        if(!$result){
+            echo mysqli_error($this->connectionObj);
+        }
+        print_r($result);
+
+        $categories = [];
+        while($row = mysqli_fetch_array($result)){
+            array_push($categories, $row[0]);
+        }
+        return $categories;
     }
 }
 ?>

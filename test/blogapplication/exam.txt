@@ -1,0 +1,11 @@
+array_difference($array1, $array2) is an array function that takes two arrays as the parameters. This function returns those
+elements that occurs in the first array and not in the second array.
+
+For Ex.
+$array1 = [1,2,3,4,5,6,7,8,9];
+$array2 = [1,2,3,7,8,9];
+
+echo array_difference($array1, $array2);
+
+this will result in a new array that will only contain [4,5,6];
+

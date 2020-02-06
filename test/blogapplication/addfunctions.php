@@ -42,6 +42,161 @@ function getBlogValue($section, $fieldName, $returnType = ""){
 }
 
 
+
+function getSpecificBlogData(){
+    require_once 'database/DB.php';
+    $selectCurrentBlog = "SELECT
+                            blog_post_title,
+                            blog_post_content,
+                            blog_post_url,
+                            blog_post_publishedat
+                        FROM blog_post WHERE blog_post_id=".$_SESSION['blogId']."";   
+
+    $getAllDataObj = new DB();
+    return $result = $getAllDataObj->fetchData($selectCurrentBlog);
+}
+
+
+
+function insertValidBlogData(){
+    require_once 'database/DB.php';
+    $insertObj = new DB();
+    $cleanArray = getCleanBlogArray();
+    $last_id = $insertObj->insertData('blog_post', $cleanArray);
+
+    echo $last_id;
+    $selectedCategories = $_POST['blog']['selectCategory'];
+    $selected = [];
+    $insertCategoryObj = new DB();
+    foreach($selectedCategories as $category){
+        $selected = array(
+            'blog_id' => $last_id,
+            'category_id' => $category
+        );
+        $insertCategoryObj->insertData('post_category', $selected);
+    }
+    return $last_id;
+}
+
+function getCleanBlogArray(){
+    date_default_timezone_set('Asia/Kolkata');
+    $currentTime = date( 'd-m-Y h:i:s A', time());
+    if(isset($_FILES['blogImage'])){
+        
+        $imageName = $_FILES['blogImage']['name'];
+        $profilePicExtension = $_FILES['blogImage']['type'];
+
+        $location = "../uploaded/blogimage/";
+        if(move_uploaded_file($_FILES['blogImage']['tmp_name'], $location.$imageName)){
+            echo "Ok";
+        }
+        else{
+            echo "Error";
+        }
+    }
+    else{
+        $imageName = ' ';
+    }
+
+    if(!isset($_SESSION['blogId'])){
+        $blogKeys = ['blog_post_user_id', 'blog_post_title', 'blog_post_url', 'blog_post_content',
+                         'blog_post_image', 'blog_post_publishedat', 'blog_post_createdat'];
+        $blogValues = [$_SESSION['currentUser'], $_POST['blog']['txtBlogTitle'], 
+                            $_POST['blog']['txtURL'], $_POST['blog']['txtareaContent'], 
+                            $imageName, $_POST['blog']['datePublishedOn'], $currentTime];
+    }
+    else{
+        $blogKeys = ['blog_post_user_id', 'blog_post_title', 'blog_post_url', 'blog_post_content',
+                         'blog_post_image', 'blog_post_publishedat', 'blog_post_category', 'blog_post_updatedat'];
+        $blogValues = [$_SESSION['currentUser'], $_POST['blog']['txtBlogTitle'], 
+                            $_POST['blog']['txtURL'], $_POST['blog']['txtareaContent'], 
+                            $imageName, $_POST['blog']['datePublishedOn'], 
+                            $_POST['blog']['selectCategory'], $currentTime];
+    }
+    return array_combine($blogKeys, $blogValues);
+}
+
+
+
+
+function getBlogSubmitName(){
+    if(isset($_SESSION['blogId'])){
+        return "buttonUpdateBlog";
+    }
+    else{
+        return "buttonAddBlog";
+    }
+}
+
+function getBlogSubmitValue(){
+    if(isset($_SESSION['blogId'])){
+        return "Update Blog";
+    }
+    else{
+        return "Submit";
+    }
+}
+
+function getBlogName(){
+    if(isset($_GET['toBeUpdated'])){
+        return "Update Blog";
+    }
+    else{
+        return "Add New Blog";
+    }
+}
+
+function updateValidBlogData(){
+    $blogArray = getCleanBlogArray();
+
+    date_default_timezone_set('Asia/Kolkata');
+    $currentTime = date( 'd-m-Y h:i:s A', time());
+
+    require_once 'database/DB.php';
+    $updateObj =  new DB();
+    $updateQuery = "UPDATE blog_post SET ";
+
+    foreach($blogArray as $fieldName => $fieldValue){
+        if($fieldName == "blog_post_updatedat"){
+            $updateQuery .= $fieldName." = '".$currentTime."'";
+        }
+        else{
+            $updateQuery .= $fieldName." = '".$fieldValue."',";            
+        }
+    }
+    $updateQuery .= " WHERE blog_post_id=".$_SESSION['blogId'];
+    $updateObj->updateData($updateQuery);
+    header("location:../homepage/");
+}
+
+
+
+
+
+
+
+
+//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+//*-*-*-*-*-*-*-*-*-*-*-*-*-CATEGORY-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*
+//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+//*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+
+function getSpecificCategoryData(){
+    require_once 'database/DB.php';
+    $selectCurrentCategory = "SELECT
+                            category_title,
+                            category_content,
+                            category_url,
+                            category_metatitle
+                        FROM category WHERE category_id=".$_SESSION['categoryId']."";
+
+    $getAllDataObj = new DB();
+    return $result = $getAllDataObj->fetchData($selectCurrentCategory);
+}
+
+
 function getAllCategories(){
     require_once 'database/DB.php';
     $getCategoriesObj = new DB();
@@ -89,85 +244,11 @@ function getCategoryValue($section, $fieldName, $returnType = ""){
 }
 
 
-function getSpecificCategoryData(){
-    require_once 'database/DB.php';
-    $selectCurrentCategory = "SELECT
-                            category_title,
-                            category_content,
-                            category_url,
-                            category_metatitle
-                        FROM category WHERE category_id=".$_SESSION['categoryId']."";
-
-    $getAllDataObj = new DB();
-    return $result = $getAllDataObj->fetchData($selectCurrentCategory);
-}
-
-function getSpecificBlogData(){
-    require_once 'database/DB.php';
-    $selectCurrentBlog = "SELECT
-                            blog_post_title,
-                            blog_post_content,
-                            blog_post_url,
-                            blog_post_publishedat,
-                            blog_post_category
-                        FROM blog_post WHERE blog_post_id=".$_SESSION['blogId']."";   
-
-    $getAllDataObj = new DB();
-    return $result = $getAllDataObj->fetchData($selectCurrentBlog);
-}
-
 function insertValidCategoryData(){
     require_once 'database/DB.php';
     $insertObj = new DB();
     $cleanArray = getCleanCategoryArray();
     $last_id = $insertObj->insertData('category', $cleanArray);
-}
-
-function insertValidBlogData(){
-    require_once 'database/DB.php';
-    $insertObj = new DB();
-    $cleanArray = getCleanBlogArray();
-    $status = $insertObj->insertData('blog_post', $cleanArray);
-    return $status;
-}
-
-function getCleanBlogArray(){
-    date_default_timezone_set('Asia/Kolkata');
-    $currentTime = date( 'd-m-Y h:i:s A', time());
-    if(isset($_FILES['blogImage'])){
-        
-        $imageName = $_FILES['blogImage']['name'];
-        $profilePicExtension = $_FILES['blogImage']['type'];
-
-        $location = "../uploaded/blogimage/";
-        if(move_uploaded_file($_FILES['blogImage']['tmp_name'], $location.$imageName)){
-            echo "Ok";
-        }
-        else{
-            echo "Error";
-        }
-    }
-    else{
-        $imageName = ' ';
-    }
-
-    if(!isset($_SESSION['blogId'])){
-        $blogKeys = ['blog_post_user_id', 'blog_post_title', 'blog_post_url', 'blog_post_content',
-                         'blog_post_image', 'blog_post_publishedat', 'blog_post_category', 'blog_post_createdat'];
-        $blogValues = [$_SESSION['currentUser'], $_POST['blog']['txtBlogTitle'], 
-                            $_POST['blog']['txtURL'], $_POST['blog']['txtareaContent'], 
-                            $imageName, $_POST['blog']['datePublishedOn'], 
-                            $_POST['blog']['selectCategory'], $currentTime];
-    }
-    else{
-        $blogKeys = ['blog_post_user_id', 'blog_post_title', 'blog_post_url', 'blog_post_content',
-                         'blog_post_image', 'blog_post_publishedat', 'blog_post_category', 'blog_post_updatedat'];
-        $blogValues = [$_SESSION['currentUser'], $_POST['blog']['txtBlogTitle'], 
-                            $_POST['blog']['txtURL'], $_POST['blog']['txtareaContent'], 
-                            $imageName, $_POST['blog']['datePublishedOn'], 
-                            $_POST['blog']['selectCategory'], $currentTime];
-    }
-    return array_combine($blogKeys, $blogValues);
 }
 
 function getCleanCategoryArray(){
@@ -212,72 +293,6 @@ function getCleanCategoryArray(){
     return array_combine($categoryKeys, $categoryValues);
 }
 
-
-function getBlogSubmitName(){
-    if(isset($_SESSION['blogId'])){
-        return "buttonUpdateBlog";
-    }
-    else{
-        return "buttonAddBlog";
-    }
-}
-
-function getBlogSubmitValue(){
-    if(isset($_SESSION['blogId'])){
-        return "Update Blog";
-    }
-    else{
-        return "Submit";
-    }
-}
-
-
-function getCategorySubmitName(){
-    if(isset($_SESSION['categoryId'])){
-        return "buttonUpdateCategory";
-    }
-    else{
-        return "buttonAddCategory";
-    }
-}
-
-function getCategorySubmitValue(){
-    if(isset($_SESSION['categoryId'])){
-        return "Update Category";
-    }
-    else{
-        return "Submit";
-    }
-}
-
-
-
-
-
-function updateValidBlogData(){
-    $blogArray = getCleanBlogArray();
-
-    date_default_timezone_set('Asia/Kolkata');
-    $currentTime = date( 'd-m-Y h:i:s A', time());
-
-    require_once 'database/DB.php';
-    $updateObj =  new DB();
-    $updateQuery = "UPDATE blog_post SET ";
-
-    foreach($blogArray as $fieldName => $fieldValue){
-        if($fieldName == "blog_post_updatedat"){
-            $updateQuery .= $fieldName." = '".$currentTime."'";
-        }
-        else{
-            $updateQuery .= $fieldName." = '".$fieldValue."',";            
-        }
-    }
-    $updateQuery .= " WHERE blog_post_id=".$_SESSION['blogId'];
-    $updateObj->updateData($updateQuery);
-    header("location:../homepage/");
-}
-
-
 function updateValidCategoryData(){
     $categoryArray = getCleanCategoryArray();
 
@@ -303,4 +318,32 @@ function updateValidCategoryData(){
     echo $updateQuery;
     $updateObj->updateData($updateQuery);
 }
+
+function getCategorySubmitName(){
+    if(isset($_SESSION['categoryId'])){
+        return "buttonUpdateCategory";
+    }
+    else{
+        return "buttonAddCategory";
+    }
+}
+
+function getCategorySubmitValue(){
+    if(isset($_SESSION['categoryId'])){
+        return "Update Category";
+    }
+    else{
+        return "Submit";
+    }
+}
+
+function getCategoryName(){
+    if(isset($_GET['toBeUpdated'])){
+        return "Update Category";
+    }
+    else{
+        return "Add New Category";
+    }
+}
+
 ?>

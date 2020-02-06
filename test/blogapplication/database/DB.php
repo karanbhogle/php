@@ -18,12 +18,10 @@ class DB{
         $valueString = "'".implode("','",$values)."'";
 
         $insertQueryString = "INSERT INTO ".$tableName."(".$columnString.") VALUES(".$valueString.")";
-
+        echo '<br><pre>'.$insertQueryString.'</pre>';
         $result = mysqli_query($this->connectionObj, $insertQueryString);
-        if(!$result){
-            return mysqli_error($this->connectionObj);
-        }
-        return "inserted";
+        $last_id = mysqli_insert_id($this->connectionObj);
+        return $last_id;
     }
 
     function checkUserLoginDetails($email, $password){
@@ -79,16 +77,15 @@ class DB{
     }
     
     function getAllCategoriesTitle(){
-        $getCategoriesQueryString = "SELECT category_title from category";
+        $getCategoriesQueryString = "SELECT category_id, category_title from category";
         $result = mysqli_query($this->connectionObj, $getCategoriesQueryString);
         if(!$result){
             echo mysqli_error($this->connectionObj);
         }
-        print_r($result);
 
         $categories = [];
         while($row = mysqli_fetch_array($result)){
-            array_push($categories, $row[0]);
+            array_push($categories, $row);
         }
         return $categories;
     }

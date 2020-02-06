@@ -74,6 +74,7 @@ if(isset($_SESSION['currentUser']) && isset($_POST['btnAddBlogPost'])){
 if(isset($_SESSION['currentUser']) && isset($_POST['btnMyProfile'])){
     header("location:../register/");
 }
+
 if(isset($_GET['toBeDeleted'])){
     require_once '../database/DB.php';
     $deleteQuery = "DELETE FROM blog_post WHERE blog_post_id=".$_GET['toBeDeleted'];
@@ -171,7 +172,6 @@ function displayTableRows(){
 function getResultData(){
     $selectQuery = 'SELECT 
                     blog_post_id PostID,
-                    blog_post_category "Category Name",
                     blog_post_title Title,
                     blog_post_publishedat "Published Date"
                 FROM blog_post 

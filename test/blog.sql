@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 04, 2020 at 06:08 PM
+-- Generation Time: Feb 06, 2020 at 09:22 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.26
 
@@ -36,7 +36,6 @@ CREATE TABLE `blog_post` (
   `blog_post_content` varchar(50) NOT NULL,
   `blog_post_image` varchar(30) NOT NULL,
   `blog_post_publishedat` varchar(50) NOT NULL,
-  `blog_post_category` varchar(30) NOT NULL,
   `blog_post_createdat` varchar(50) NOT NULL,
   `blog_post_updatedat` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -45,11 +44,10 @@ CREATE TABLE `blog_post` (
 -- Dumping data for table `blog_post`
 --
 
-INSERT INTO `blog_post` (`blog_post_id`, `blog_post_user_id`, `blog_post_title`, `blog_post_url`, `blog_post_content`, `blog_post_image`, `blog_post_publishedat`, `blog_post_category`, `blog_post_createdat`, `blog_post_updatedat`) VALUES
-(6, 8, 'Ritu  1', 'lkjlk', 'uoiuj', ' ', '2015-03-29', '#Technology', '04-02-2020 03:28:39 PM', '04-02-2020 03:52:16 PM'),
-(8, 8, 'Ritu2', 'lkjlkio', 'uoiuj', ' ', '2015-03-29', 'Education', '04-02-2020 03:32:06 PM', '04-02-2020 03:53:56 PM'),
-(9, 8, 'Ritu 3s', '', 'Cjksjkfh', ' ', '2013-09-28', '#Technology', '04-02-2020 03:48:45 PM', '04-02-2020 03:51:14 PM'),
-(18, 9, 'Rajnik 1', 'rajnik1', 'okjojo', ' ', '2017-10-29', 'Healthcare', '04-02-2020 04:31:11 PM', '');
+INSERT INTO `blog_post` (`blog_post_id`, `blog_post_user_id`, `blog_post_title`, `blog_post_url`, `blog_post_content`, `blog_post_image`, `blog_post_publishedat`, `blog_post_createdat`, `blog_post_updatedat`) VALUES
+(26, 8, 'This blog 1', '/url1', 'asjdf;lkaj80', ' ', '2017-10-29', '06-02-2020 04:57:54 PM', ''),
+(28, 8, 'Blog 2', '/url3', 'padmani', ' ', '2019-08-20', '06-02-2020 05:00:39 PM', ''),
+(29, 12, 'asdfj;', 'jlk', 'jkj;lk', ' ', '2018-11-30', '06-02-2020 07:22:33 PM', '');
 
 -- --------------------------------------------------------
 
@@ -75,7 +73,9 @@ CREATE TABLE `category` (
 
 INSERT INTO `category` (`category_id`, `category_parent_id`, `category_title`, `category_metatitle`, `category_url`, `category_content`, `category_createdat`, `category_updatedat`, `category_image`) VALUES
 (13, 0, 'Tehkhl', 'lnln', 'n', 'jljlkjlkjkl', '04-02-2020 04:49:23 PM', '04-02-2020 05:41:24 PM', 'kakashi come-of-age.jpg'),
-(15, 0, 'Education', 'edu', '/education', 'this contains education content.', '04-02-2020 05:44:08 PM', '', 'kakashi.png');
+(15, 0, 'Education', 'edu', '/education', 'this contains education content.', '04-02-2020 05:44:08 PM', '06-02-2020 03:04:38 PM', 'kakashi come-of-age.jpg'),
+(16, 13, 'Fashion1', 'fash', '/fashion', 'This is  fashion.', '06-02-2020 03:04:01 PM', '06-02-2020 07:21:25 PM', 'kakashi come-of-age.jpg'),
+(17, 13, 'kjalf', '7jknkm', '/5657kn', 'kjlkjlj', '06-02-2020 06:26:48 PM', '06-02-2020 06:45:01 PM', 'kakashi come-of-age.jpg');
 
 -- --------------------------------------------------------
 
@@ -85,8 +85,20 @@ INSERT INTO `category` (`category_id`, `category_parent_id`, `category_title`, `
 
 CREATE TABLE `post_category` (
   `post_category_id` int(11) NOT NULL,
-  `post_category_category_id` int(10) NOT NULL
+  `blog_id` int(10) NOT NULL,
+  `category_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `post_category`
+--
+
+INSERT INTO `post_category` (`post_category_id`, `blog_id`, `category_id`) VALUES
+(5, 26, 0),
+(8, 28, 0),
+(9, 28, 13),
+(10, 29, 16),
+(11, 29, 17);
 
 -- --------------------------------------------------------
 
@@ -115,8 +127,9 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`user_id`, `user_prefix`, `user_firstname`, `user_lastname`, `user_mobile`, `user_email`, `user_password`, `user_lastlogin`, `user_information`, `user_createdat`, `user_updatedat`) VALUES
 (1, 'Dr', 'Bhushan', 'Trivedi', '9876543454', 'b@mail.com', 'c20ad4d76fe97759aa27a0c99bff6710', '', 'i am bhushan', '03-02-2020 02:52:51 PM', ''),
 (7, 'Mr', 'karan', 'bhogle', '9876567654', 'k@mail.com', 'c20ad4d76fe97759aa27a0c99bff6710', '', 'i am karan.', '03-02-2020 03:07:25 PM', ''),
-(8, 'Miss', 'Ritu', 'Patel', '8877665544', 'ritu@mail.com', 'c4ca4238a0b923820dcc509a6f75849b', '04-02-2020 05:59:18 PM', 'This will be edited.', '03-02-2020 04:47:25 PM', '04-02-2020 05:59:33 PM'),
-(9, 'Mr', 'Rajnik', 'Tapasiya', '6765456543', 'rt@mail.com', 'c4ca4238a0b923820dcc509a6f75849b', '04-02-2020 04:08:37 PM', 'i am rajnik', '04-02-2020 04:07:35 PM', '');
+(8, 'Miss', 'Ritu', 'Patel', '8877665544', 'ritu@mail.com', 'c4ca4238a0b923820dcc509a6f75849b', '06-02-2020 03:52:28 PM', 'This will be edited.', '03-02-2020 04:47:25 PM', '06-02-2020 03:53:31 PM'),
+(9, 'Mr', 'Rajnik', 'Tapasiya', '6765456543', 'rt@mail.com', 'c4ca4238a0b923820dcc509a6f75849b', '06-02-2020 06:24:49 PM', 'i am rajnik', '04-02-2020 04:07:35 PM', ''),
+(12, 'Mr', 'karan', 'jlkjl', '8767654565', 'test@example.co', 'c4ca4238a0b923820dcc509a6f75849b', '', 'fsadf', '06-02-2020 07:19:59 PM', '06-02-2020 07:22:07 PM');
 
 --
 -- Indexes for dumped tables
@@ -142,7 +155,8 @@ ALTER TABLE `category`
 -- Indexes for table `post_category`
 --
 ALTER TABLE `post_category`
-  ADD PRIMARY KEY (`post_category_id`);
+  ADD PRIMARY KEY (`post_category_id`),
+  ADD KEY `blog_id` (`blog_id`);
 
 --
 -- Indexes for table `user`
@@ -159,25 +173,25 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `blog_post`
 --
 ALTER TABLE `blog_post`
-  MODIFY `blog_post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `blog_post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `post_category`
 --
 ALTER TABLE `post_category`
-  MODIFY `post_category_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `post_category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables
@@ -188,6 +202,12 @@ ALTER TABLE `user`
 --
 ALTER TABLE `blog_post`
   ADD CONSTRAINT `blog_post_ibfk_1` FOREIGN KEY (`blog_post_user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `post_category`
+--
+ALTER TABLE `post_category`
+  ADD CONSTRAINT `post_category_ibfk_1` FOREIGN KEY (`blog_id`) REFERENCES `blog_post` (`blog_post_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

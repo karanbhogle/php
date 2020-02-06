@@ -32,7 +32,7 @@ if(!isset($_SESSION['currentUser'])){
 
 if(isset($_POST['buttonAddBlog'])){
     $status = insertValidBlogData();
-    if($status == "inserted"){
+    if($status){
         header("location:../homepage");
     }
     else{
@@ -52,7 +52,7 @@ if(isset($_POST['buttonUpdateBlog'])){
 
 <form action="index.php" method="POST">
 <div id="divRegister">
-    <h1>Add New Blog Post</h1>
+    <h1><?php echo getBlogName(); ?></h1>
 
     <div class="col-25">
         <label>Title</label>
@@ -93,12 +93,12 @@ if(isset($_POST['buttonUpdateBlog'])){
             <label>Category</label>
         </div>
         <div class="col-75">
-            <select name="blog[selectCategory]">
+            <select name="blog[selectCategory][]" multiple>
                         <option value=''></option>
                 <?php $categoriesArray = getAllCategories();?>
                     <?php foreach($categoriesArray as $category): ?>
-                        <?php $selectedCategory = in_array(getBlogValue('blog', 'selectCategory'),[$category]) ? "selected":""; ?>
-                        <option value="<?= $category?>" <?= $selectedCategory ?> ><?= $category?></option>
+                        <?php $selectedCategory = array_intersect(getBlogValue('blog', 'selectCategory', []),[$category]) ? "selected":""; ?>
+                        <option value="<?= $category[0]?>" <?= $selectedCategory ?> ><?= $category[1]?></option>
                     <?php endforeach; ?>
             </select>
         </div>    

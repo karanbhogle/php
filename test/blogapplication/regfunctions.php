@@ -30,6 +30,9 @@ function validateData(){
         if(!preg_match('/^[a-zA-Z\s]+$/', $lastName)){
             $lastNameError = "Please Enter Valid LastName";
         }
+        if(doesEmailExists($email)){
+            $emailError = "This email already exists";
+        }
         if(!preg_match("/[a-zA-Z0-9._-]+\@[a-zA-Z]+\.[a-zA-Z.]{2,5}/", $email)) {
             $emailError = "Please Enter Valid Email"; 
         }
@@ -49,6 +52,21 @@ function validateData(){
     }
     else{
         echo "Red * is mandatory";
+    }
+}
+
+
+function doesEmailExists($email){
+    require_once 'database/DB.php';
+    $emailCheckerQuery = "SELECT * FROM user WHERE user_email = "."'".$email."'";
+    $emailCheckerObj = new DB();
+    $result = $emailCheckerObj->fetchData($emailCheckerQuery);
+
+    if(mysqli_num_rows($result) >= 1){
+        return true;
+    }
+    else{
+        return false;
     }
 }
 

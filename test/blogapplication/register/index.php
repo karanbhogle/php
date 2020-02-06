@@ -46,7 +46,7 @@ if(isset($_POST['btnUpdate'])){
 
 <form action="index.php" method="POST">
 <div id="divRegister">
-    <h1>Register</h1>
+    <h1><?php echo getH1Header(); ?></h1>
     <div class="col-25">
         <label>Prefix</label>
     </div>
@@ -65,7 +65,7 @@ if(isset($_POST['btnUpdate'])){
     </div>
     <div class="col-75">
         <input type="text" id="txtFirstName" name="account[txtFirstName]" value="<?php echo getValue('account', 'txtFirstName'); ?>">
-        <span class = "error"><?php if(isset($_POST['buttonRegister'])){echo $firstNameError;}?></span>
+        <span class = "error"><?php if(isset($_POST['btnRegister']) || isset($_POST['btnUpdate'])){echo $firstNameError;}?></span>
     </div>
 
 
@@ -74,8 +74,8 @@ if(isset($_POST['btnUpdate'])){
             <label>LastName</label>
         </div>
         <div class="col-75">
-            <input type="text" id="txtLastName" name="account[txtLastName]" value="<?php echo getValue('account', 'txtLastName') ?>">
-            <span class = "error"><?php if(isset($_POST['buttonRegister'])){echo $lastNameError;}?></span>
+            <input type="text" id="txtLastName" name="account[txtLastName]" value="<?php echo getValue('account', 'txtLastName'); ?>">
+            <span class = "error"><?php if(isset($_POST['btnRegister']) || isset($_POST['btnUpdate'])){echo $lastNameError;}?></span>
         </div>    
     </div>
 
@@ -85,7 +85,7 @@ if(isset($_POST['btnUpdate'])){
         </div>
         <div class="col-75">
             <input type="text" name="account[txtEmail]" value="<?php echo getValue('account', 'txtEmail') ?>">
-            <span class = "error"><?php if(isset($_POST['buttonRegister'])){echo $emailError;}?></span>
+            <span class = "error"><?php if(isset($_POST['btnRegister']) || isset($_POST['btnUpdate'])){echo $emailError;}?></span>
         </div>    
     </div>
 
@@ -95,7 +95,7 @@ if(isset($_POST['btnUpdate'])){
         </div>
         <div class="col-75">
             <input type="text" id="txtLastName" name="account[txtPhoneNumber]" value="<?php echo getValue('account', 'txtPhoneNumber') ?>">
-            <span class = "error"><?php if(isset($_POST['buttonRegister'])){echo $phoneNumberError;}?></span>
+            <span class = "error"><?php if(isset($_POST['btnRegister']) || isset($_POST['btnUpdate'])){echo $phoneNumberError;}?></span>
         </div>    
     </div>
 
@@ -114,7 +114,7 @@ if(isset($_POST['btnUpdate'])){
         </div>
         <div class="col-75">
             <input type="password" name="account[txtConfirmPassword]" value="<?php echo getValue('account', 'txtConfirmPassword') ?>">
-            <span class = "error"><?php if(isset($_POST['buttonRegister'])){echo $passwordError;}?></span>
+            <span class = "error"><?php if(isset($_POST['btnRegister']) || isset($_POST['btnUpdate'])){echo $passwordError;}?></span>
         </div>    
     </div>
 
@@ -138,8 +138,20 @@ if(isset($_POST['btnUpdate'])){
 
     <div>
         <input type="submit" <?php if(!isset($_SESSION['currentUser'])){echo 'style="display:none"';} ?> id="<?php echo getButtonId(); ?>" name="<?php echo getButtonName(); ?>" value="<?php echo getButtonValue(); ?>">
+        <a href="/cybercom/extra/blogapplication/">Go Back</a>
     </div>
 </div>            
 </form>
 
 <script src="blogapp.js"></script>
+
+<?php
+function getH1Header(){
+    if(!isset($_SESSION['currentUser'])){
+        return "Register";
+    }
+    else{
+        return "Update ".getValue('account', 'txtFirstName')." ".getValue('account', 'txtLastName')."'s Data";
+    }
+}
+?>

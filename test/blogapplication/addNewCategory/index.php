@@ -47,7 +47,7 @@ if(isset($_POST['buttonUpdateCategory'])){
 
 <form action="index.php" method="POST" enctype="multipart/form-data">
 <div id="divRegister">
-    <h1>Add New Category</h1>
+    <h1><?php echo getCategoryName(); ?></h1>
 
     <div class="col-25">
         <label>Title</label>
@@ -91,10 +91,10 @@ if(isset($_POST['buttonUpdateCategory'])){
             <select name="category[selectCategory]">
                         <option value=''></option>
                 <?php $categoriesArray = getAllCategories();?>
-                    <?php foreach($categoriesArray as $category): ?>
+                    <?php for($i = 0; $i < sizeof($categoriesArray); $i++): ?>
                         <?php $selectedCategory = in_array(getCategoryValue('category', 'selectCategory'),[$category]) ? "selected":""; ?>
-                        <option value="<?= $category?>" <?= $selectedCategory ?> ><?= $category?></option>
-                    <?php endforeach; ?>
+                        <option value="<?= $categoriesArray[$i]['category_id']?>" <?= $selectedCategory ?> ><?= $categoriesArray[$i]['category_title']?></option>
+                    <?php endfor; ?>
             </select>
         </div>    
     </div>

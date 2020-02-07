@@ -5,12 +5,12 @@
 require_once '../Core/Router.php';
 
 $router = new Router();
-$router->add('', ['controller'=>'Home', 'action'=>'index']);
-$router->add('posts', ['controller'=>'Posts', 'action'=>'index']);
-$router->add('posts/new', ['controller'=>'Posts', 'action'=>'new']);
 
 $url = $_SERVER['QUERY_STRING'];
 
+$router->add('', ['controller'=>'Home', 'action'=>'index']);
+$router->add('posts', ['controller'=>'Posts', 'action'=>'index']);
+$router->add('posts/new', ['controller'=>'Posts', 'action'=>'new']);
 
 if($router->match($url)){
     echo '<pre>';

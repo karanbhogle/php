@@ -1,3 +1,3 @@
 <?php
-header("location:/cybercom/extra/MVCProject/public/");
+header("location:/cybercom/php/06.02.2020/MVCProject/public/");
 ?>

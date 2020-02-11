@@ -1,6 +1,6 @@
 # Remove index.php from the request but maintain the query string
 RewriteEngine On
-RewriteBase /cybercom/extra/MVCProject/public/
+RewriteBase /cybercom/php/06.02.2020/MVCProject/public/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php?$1 [L,QSA]

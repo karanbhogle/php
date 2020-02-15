@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %} Add Product : Admin Dashboard: MVC {% endblock %}
+
+{% block body %}
+	<h1>Add Product : Admin Dashboard</h1>
+	
+	<div class='mainContainer'>
+		<table border="1">
+			<tr>
+				<td>Product Name</td>
+				<td><input type="text" name="txtProductName"></td>
+			</tr>
+
+			<tr>
+				<td>Product SKU</td>
+				<td><input type="text" name="txtProductSKU"></td>
+			</tr>
+
+			<tr>
+				<td>Product Image</td>
+				<td><input type="file" name="imgProductImage"></td>
+			</tr>
+
+			<tr>
+				<td>Product Name</td>
+				<td><input type="text" name="txtProductName"></td>
+			</tr>
+
+			<tr>
+				<td>Product Status</td>
+				<td><input type="text" name="txtProductStatus"></td>
+			</tr>
+
+			<tr>
+				<td>Product Description</td>
+				<td><textarea name="txtProductDescription" cols=40 rows=8></textarea></td>
+			</tr>
+
+			<tr>
+				<td>Product Short Description</td>
+				<td><textarea name="txtProductShortDescription" cols=40 rows=5></textarea></td>
+			</tr>
+
+			<tr>
+				<td>Product Price</td>
+				<td><input type="number" maxlength="8" name="txtProductPrice">
+			</tr>
+
+			<tr>
+				<td>Product Stock</td>
+				<td><input type="number" maxlength="10" name="txtProductStock">
+			</tr>
+
+			<tr>
+				<td>Product Name</td>
+				<td><input type="text" name="txtProductName">
+			</tr>
+
+			<tr>
+				<td>Product Name</td>
+				<td><input type="text" name="txtProductName">
+			</tr>
+		</table>
+	</div>
+	
+{% endblock %}

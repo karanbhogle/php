@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %} Update Category : Admin Dashboard: MVC {% endblock %}
+
+{% block body %}
+	<h1>Update Category : Admin Dashboard</h1>
+	
+	{% for c in categories %}
+	<div class='mainContainer'>
+	<form action="{{ base_url }}admin/categories/update" method="post" enctype="multipart/form-data">
+		<table border="1">
+			<input type="hidden" name="txtHiddenId" value="{{ c.categories_id }}">
+			<tr>
+				<td>Category Name</td>
+				<td><input type="text" name="txtCategoryName" value="{{ c.categories_categoryname }}"></td>
+			</tr>
+
+			<tr>
+				<td>Category Image</td>
+				<td><input type="file" name="imgCategoryImage"></td>
+			</tr>
+
+			<tr>
+				<td>Category Status</td>
+				<td>
+					<select name="selectCategoryStatus" value="{{ c.categories_status }}">
+						<option value="0">Not Available</option>
+						<option value="1">Available</option>
+					</select>
+				</td>
+			</tr>
+
+			<tr>
+				<td>Category Description</td>
+				<td><textarea name="txtCategoryDescription" cols=40 rows=8>{{ c.categories_description }}</textarea></td>
+			</tr>
+
+			<tr>
+				<td>Category Parent Category</td>
+				<td><input type="number" value="{{ c.categories_parentcategory }}" maxlength="8" name="txtCategoryParent"></td>
+			</tr>
+
+			<tr>
+				<td colspan="2"><input type="submit" name="btnUpdateCategory" value="Update Category"></td>
+			</tr>
+		</table>
+	</form><br><br>
+	<a href="http://localhost/cybercom/extra/mvc/admin/dashboard">Dashboard</a>  |  
+	<a href="http://localhost/cybercom/extra/mvc/admin/categories">Manage Category</a><br>
+	</div>
+	{% endfor %}
+	
+{% endblock %}

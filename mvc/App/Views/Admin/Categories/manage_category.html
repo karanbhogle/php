@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %} Manage Category : Admin Dashboard: MVC {% endblock %}
+
+{% block body %}
+	<h1>Manage Category : Admin Dashboard</h1>
+	<nav>
+		<a href="http://localhost/cybercom/extra/mvc/admin/categories/add">Add Category</a><br><br>
+	</nav>
+
+	<table border="2">
+		<tr>
+	        <th>Category Name</th>
+	        <th>Category URL Key</th>
+	        <th>Category Image</th>
+	        <th>Category Status</th>
+	        <th>Category Description</th>
+	   		<th>Category Parent</th>
+	   		<th>ACTION</th>
+	    </tr>
+
+	    {% for category in categories %}
+	    <tr>
+	        <td>{{ category.categories_categoryname }}</td>
+	        <td>{{ category.categories_urlkey }}</td>
+	        <td>{{ category.categories_image }}</td>
+	        <td>{{ category.categories_status }}</td>
+	        <td>{{ category.categories_description }}</td>
+	        <td>{{ category.categories_parentcategory }}</td>
+	        <td>
+	        	<a href="{{ base_url }}admin/categories/edit/{{ category.categories_id }}">UPDATE</a>&nbsp;&nbsp;
+	        	<a href="{{ base_url }}admin/categories/delete/{{ category.categories_id }}">DELETE</a>
+	        </td>
+	    </tr>
+	    {% endfor %}
+	</table>
+{% endblock %}

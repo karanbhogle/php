@@ -29,41 +29,46 @@ class Category extends \Core\Model
 	public static function addCategory($dataArray){
 		extract($dataArray);
 		$urlkey = Category::getCategoryURLKey($txtCategoryName);
-		$txtCategoryName = Category::getCategoryNameStudlyCase($txtCategoryName);
-
-		try{
-			$db = static::getDB();
-
-			$fileName = $_FILES["imgCategoryImage"]["name"];
-
-			@$location = "src/images/" . $_FILES["imgCategoryImage"]["name"];
-            if(move_uploaded_file(@$_FILES["imgCategoryImage"]["tmp_name"], $location)){
-            }
-
-            if($txtCategoryParent == ""){
-            	$txtCategoryParent = '0';
-            }
-			$insertCategory = "INSERT INTO categories(
-									categories_categoryname,
-								    categories_urlkey,
-								    categories_image,
-								    categories_status,
-								    categories_description,
-								    categories_parentcategory
-								)
-								VALUES(
-								    '$txtCategoryName',
-								    '$urlkey',
-								    '$fileName',
-								    '$selectCategoryStatus',
-								    '$txtCategoryDescription',
-								    '$txtCategoryParent'
-								);";
-			$db->exec($insertCategory);
-			return $txtCategoryName;
-		}
-		catch(PDOException $e){
+		if(!$urlkey){
 			return false;
+		}
+		else{
+			$txtCategoryName = Category::getCategoryNameStudlyCase($txtCategoryName);
+
+			try{
+				$db = static::getDB();
+
+				$fileName = $_FILES["imgCategoryImage"]["name"];
+
+				@$location = "src/images/categories/" . $_FILES["imgCategoryImage"]["name"];
+	            if(move_uploaded_file(@$_FILES["imgCategoryImage"]["tmp_name"], $location)){
+	            }
+
+	            if($txtCategoryParent == "0"){
+	            	$txtCategoryParent = 'NULL';
+	            }
+				$insertCategory = "INSERT INTO categories(
+										categories_categoryname,
+									    categories_urlkey,
+									    categories_image,
+									    categories_status,
+									    categories_description,
+									    categories_parentcategory
+									)
+									VALUES(
+									    '$txtCategoryName',
+									    '$urlkey',
+									    '$fileName',
+									    '$selectCategoryStatus',
+									    '$txtCategoryDescription',
+									     $txtCategoryParent
+									);";
+				$db->exec($insertCategory);
+				return $txtCategoryName;
+			}
+			catch(PDOException $e){
+				return false;
+			}
 		}
 	}
 
@@ -71,14 +76,7 @@ class Category extends \Core\Model
 		try{
 			$db = static::getDB();
 			$txtCategoryName = strtolower((str_replace(' ', '-', $txtCategoryName)));
-			$result = $db->query("SELECT * FROM categories WHERE categories_urlkey='$txtCategoryName'");
-			if($result->rowCount() === 0){
-				return $txtCategoryName;
-			}
-			else{
-				$txtCategoryName = $txtCategoryName.rand(0,9999);
-				return $txtCategoryName;
-			}
+			return $txtCategoryName;
 		}
 		catch(PDOException $e){
 			echo $e->getMessage();
@@ -122,9 +120,6 @@ class Category extends \Core\Model
 	}
 
 	public static function updateCategory($dataArray){
-		echo "<pre>";
-		print_r($dataArray);
-		echo "</pre>";
 		extract($dataArray);
 		$urlkey = Category::getCategoryURLKey($txtCategoryName);
 		$txtCategoryName = Category::getCategoryNameStudlyCase($txtCategoryName);
@@ -133,12 +128,12 @@ class Category extends \Core\Model
 			$db = static::getDB();
 
 			$fileName = $_FILES["imgCategoryImage"]["name"];
-			if($txtCategoryParent == ""){
-            	$txtCategoryParent = '0';
+			if($txtCategoryParent == "0"){
+            	$txtCategoryParent = 'NULL';
             }
 
 			if($fileName != ""){
-				@$location = "src/images/" . $_FILES["imgCategoryImage"]["name"];
+				@$location = "src/images/categories/" . $_FILES["imgCategoryImage"]["name"];
 	            if(move_uploaded_file(@$_FILES["imgCategoryImage"]["tmp_name"], $location)){
 	            }
 
@@ -149,7 +144,7 @@ class Category extends \Core\Model
 									    categories_urlkey = '$urlkey',
 									    categories_status = '$selectCategoryStatus',
 									    categories_description = '$txtCategoryDescription',
-									    categories_parentcategory = '$txtCategoryParent',
+									    categories_parentcategory = $txtCategoryParent,
 									    categories_image = '$fileName'
 									WHERE
 									    categories_id = $txtHiddenId";
@@ -163,7 +158,7 @@ class Category extends \Core\Model
 									    categories_urlkey = '$urlkey',
 									    categories_status = '$selectCategoryStatus',
 									    categories_description = '$txtCategoryDescription',
-									    categories_parentcategory = '$txtCategoryParent'
+									    categories_parentcategory = $txtCategoryParent
 									WHERE
 									    categories_id = $txtHiddenId";
 			}
@@ -178,18 +173,79 @@ class Category extends \Core\Model
 	public static function getCategoryWithStatus($categories){
 	
 		for($i = 0; $i < sizeof($categories); $i++){
-			foreach ($categories[$i] as $key => $value) {
-				if($key === "categories_status"){
-					if($categories[$i][$key] == 0){
-						$categories[$i][$key] = "Not Available";
-					}
-					else if($categories[$i][$key] == 1){
-						$categories[$i][$key] = "Available";
-					}
-				}
+			if($categories[$i]['categories_status'] == 0){
+				$categories[$i]['categories_status'] = "Not Available";
+			}
+			else if($categories[$i]['categories_status'] == 1){
+						$categories[$i]['categories_status'] = "Available";
 			}
 		}
 		return $categories;
+	}
+
+	public static function getCategoryWithParentCategory($categories){
+		for($i = 0; $i < sizeof($categories); $i++){
+			if(isset($categories[$i]['categories_parentcategory'])){
+				$categories[$i]['categories_parentcategory'] = Category::getParentCategoryName($categories[$i]['categories_parentcategory']);
+			}
+		}
+		return $categories;
+	}
+
+	public static function getParentCategoryName($id){
+		try{
+			
+            $db = static::getDB();
+            $select = 'SELECT 
+            						categories_categoryname 
+            						FROM categories WHERE categories_id = '.$id;
+            $stmt = $db->query($select);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $results[0]['categories_categoryname'];
+        }
+        catch(PDOException $e){
+            echo $e->getMessage();
+        }
+	}
+
+	public static function getCategoryNames(){
+		try{
+            $db = static::getDB();
+            $stmt = $db->query('SELECT 
+            						categories_id,
+            						categories_categoryname 
+            						FROM categories');
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if($stmt->rowCount() > 0){
+				return $results;
+			}
+			else{
+				return false;
+			}
+        }
+        catch(PDOException $e){
+            echo $e->getMessage();
+        }
+	}
+
+	public static function getSelectedCategories($id){
+		try{
+            $db = static::getDB();
+            $stmt = $db->query('SELECT 
+            						categories_id 
+            					FROM products_categories WHERE products_id='.$id);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if($stmt->rowCount() > 0){
+				return $results;
+			}
+			else{
+				return false;
+			}
+        }
+	    catch(PDOException $e){
+	        echo $e->getMessage();
+	    }	
 	}
 }
 

@@ -3,10 +3,17 @@
 {% block title %} Admin Dashboard: MVC {% endblock %}
 
 {% block body %}
-	<h1>Admin Dashboard: MVC</h1>
-	<nav>
-		<a href="http://localhost/cybercom/extra/mvc/admin/products">Manage Products</a> |
-		<a href="http://localhost/cybercom/extra/mvc/admin/categories">Manage Categories</a> |
-		<a href="">Manage CMS</a> |
-	</nav>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  	<a class="navbar-brand">Admin Dashboard: MVC</a>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    	<div class="navbar-nav">
+      		<a class="nav-item nav-link" href="{{ base_url }}admin/products">Manage Products</a>
+      		<a class="nav-item nav-link" href="{{ base_url }}admin/categories">Manage Categories</a>
+      		<a class="nav-item nav-link" href="{{ base_url }}admin/cms/pages">Manage CMS</a></a>
+      		<a class="nav-item nav-link"href="{{ base_url }}admin/logout">Logout</a>
+    	</div>
+  	</div>
+</nav>
+	
 {% endblock %}

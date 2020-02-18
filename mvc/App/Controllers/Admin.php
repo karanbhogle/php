@@ -3,11 +3,12 @@
 namespace App\Controllers;
 use \Core\View;
 use App\Models\Admin\Category;
+use App\Models\Admin\Product;
 
 class Admin extends \Core\Controller
 {
 	public function loginAction(){
-		if(!isset($_SESSION['user'])){
+		if(@$_SESSION['user'] === null){
 			View::renderTemplate("Admin/login.html");
 		}
 		else{
@@ -16,8 +17,8 @@ class Admin extends \Core\Controller
 	}
 
 	public function loginChecker(){
-		if(isset($_SESSION['user'])){
-			if($_SESSION['user'] === "admin"){
+		if(@$_SESSION['user'] != null){
+			if(@$_SESSION['user'] === "admin"){
 				View::renderTemplate("Admin/dashboard.html");
 			}
 		}
@@ -27,7 +28,7 @@ class Admin extends \Core\Controller
 					&& isset($_POST['txtPassword']) && !empty($_POST['txtPassword']) ){
 
 					if($_POST['txtEmail'] === "admin" && $_POST['txtPassword'] === "1"){
-						$_SESSION['user'] = $_POST['txtEmail'];
+						@$_SESSION['user'] = $_POST['txtEmail'];
 						header("location:http://localhost/cybercom/extra/mvc/admin/dashboard");
 					}
 				}
@@ -42,26 +43,59 @@ class Admin extends \Core\Controller
 	}
 
 	public function dashboard(){
-		echo "Welcome, ".$_SESSION['user'];
-		View::renderTemplate("Admin/dashboard.html");
+		if(@$_SESSION['user'] === "admin"){
+			View::renderTemplate("Admin/dashboard.html", ['base_url' => $_SESSION['base_url']]);
+		}	
+		else{
+			echo "Provide Admin login credentials first";
+			View::renderTemplate("Admin/login.html");
+		}
+
 	}
 
 	public function products(){
-		View::renderTemplate("Admin/Products/manage_product.html");
+		if(@$_SESSION['user'] === "admin"){
+			$products = Product::getAllProducts();
+			$products = Product::getProductWithStatus($products);
+
+			View::renderTemplate("Admin/Products/manage_product.html",
+			[
+				'name' => 'static',
+				'base_url' => @$_SESSION['base_url'],
+				'allProducts' => $products,
+				'allCategories' => @$categories
+			]);
+		}	
+		else{
+			echo "Provide Admin login credentials first";
+			View::renderTemplate("Admin/login.html");
+		}
 	}
 
 	public function categories(){
+		if(@$_SESSION['user'] === "admin"){
+			$categories = Category::getAllCategories();
+			$categories = Category::getCategoryWithStatus($categories);
+			$categories = Category::getCategoryWithParentCategory($categories);
 
-		$categories = Category::getAllCategories();
-		echo "before Status";
-		$categories = Category::getCategoryWithStatus($categories);
+			View::renderTemplate("Admin/Categories/manage_category.html",
+			[
+				'name' => 'static',
+				'base_url' => @$_SESSION['base_url'],
+				'allCategories' => $categories
+			]);
+		}	
+		else{
+			echo "Provide Admin login credentials first";
+			View::renderTemplate("Admin/login.html");
+		}
+	}
 
-		View::renderTemplate("Admin/Categories/manage_category.html",
-		[
-			'name' => 'static',
-			'base_url' => $_SESSION['base_url'],
-			'categories' => $categories
-		]);
+	public function logout(){
+		if(@$_SESSION['user'] === "admin"){
+			session_destroy();	
+		}	
+		header("location:http://localhost/cybercom/extra/mvc/admin/login");	
 	}
 
 }

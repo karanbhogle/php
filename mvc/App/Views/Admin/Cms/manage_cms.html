@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %} Manage CMS : Admin Dashboard: MVC {% endblock %}
+
+{% block body %}
+	
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	  	<a class="navbar-brand">Admin Dashboard: MVC</a>
+	    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+	    	<div class="navbar-nav">
+	      		<a class="nav-item nav-link" href="{{ base_url }}admin/products">Manage Products</a>
+	      		<a class="nav-item nav-link" href="{{ base_url }}admin/categories">Manage Categories</a>
+	      		<a class="nav-item nav-link" href="{{ base_url }}admin/logout">Logout</a>
+	    	</div>
+	  	</div>
+	</nav>
+
+
+	<div class="container">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h2>Manage CMS Page</h2></div>
+                    <div class="col-sm-4">
+                        <br><a class="btn btn-info add-new" href="{{ base_url }}admin/cms/pages/add" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add CMS Page</a>
+                    </div>
+            </div>
+            <table border="2" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Page Title</th>
+				        <th>Page URL Key</th>
+				        <th>Page Status</th>
+				        <th>Page Content</th>
+				        <th>Page Created On:</th>
+				   		<th>Page Last Updated On:</th>
+				   		<th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	{% for page in allPages %}
+                    <tr>
+                        <td>{{ page.cms_pages_pagetitle }}</td>
+	        			<td>{{ page.cms_pages_urlkey }}</td>
+	        			<td>{{ page.cms_pages_status }}</td>
+	        			<td>{{ page.cms_pages_content }}</td>
+	        			<td>{{ page.cms_pages_createdat }}</td>
+	        			<td>{{ page.cms_pages_updatedat }}</td>
+                        <td>
+                            <a class="edit" title="Edit" data-toggle="tooltip" href="{{ base_url }}admin/cms/pages/edit/id/{{ page.cms_pages_id }}"><i class="material-icons">&#xE254;</i></a>
+                            <a class="delete" title="Delete" data-toggle="tooltip" href="{{ base_url }}admin/cms/pages/delete/id/{{ page.cms_pages_id }}"><i class="material-icons">&#xE872;</i></a>
+                        </td>
+                    </tr>  
+                    {% endfor %}    
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

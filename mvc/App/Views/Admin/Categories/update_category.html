@@ -3,51 +3,75 @@
 {% block title %} Update Category : Admin Dashboard: MVC {% endblock %}
 
 {% block body %}
-	<h1>Update Category : Admin Dashboard</h1>
-	
+
+	<h1>Update Category</h1>
+	<div style="margin: auto; text-align: center;">
+		<a href="{{ base_url }}admin/dashboard">Dashboard</a>  |  
+		<a href="{{ base_url }}admin/categories">Manage Category</a><br>
+	</div>
+
 	{% for c in categories %}
-	<div class='mainContainer'>
 	<form action="{{ base_url }}admin/categories/update" method="post" enctype="multipart/form-data">
-		<table border="1">
-			<input type="hidden" name="txtHiddenId" value="{{ c.categories_id }}">
-			<tr>
-				<td>Category Name</td>
-				<td><input type="text" name="txtCategoryName" value="{{ c.categories_categoryname }}"></td>
-			</tr>
+	<div style="width: 80%; height: 80%; margin: auto;">
+  		<div class="form-group">
+    		<div class="col-25"><label>Category Name</label></div>
+    		<input type="hidden" name="txtHiddenId" value="{{ c.categories_id }}">
+    		<div class="col-75"><input type="text" name="txtCategoryName" required value="{{ c.categories_categoryname }}" class="form-control"></div>
+  		</div>
 
-			<tr>
-				<td>Category Image</td>
-				<td><input type="file" name="imgCategoryImage"></td>
-			</tr>
+		<div class="form-group">
+    		<div class="col-25"><label>Category Image</label></div>
+    		<div class="col-75"><input type="file" name="imgCategoryImage"></div>
+  		</div>
 
-			<tr>
-				<td>Category Status</td>
-				<td>
-					<select name="selectCategoryStatus" value="{{ c.categories_status }}">
-						<option value="0">Not Available</option>
-						<option value="1">Available</option>
-					</select>
-				</td>
-			</tr>
+  		<div class="form-group">
+    		<div class="col-25"><label>Category Status</label></div>
+    		<div class="col-75"><select name="selectCategoryStatus" class="form-control-lg">
+				<option value="0" {% if c.categories_status =="0" %}
+										selected 
+									{% endif %}
+				>Not Available</option>
+				<option value="1" {% if c.categories_status =="1" %}
+										selected 
+									{% endif %}
+				>Available</option>
+			</select></div>
+  		</div>
 
-			<tr>
-				<td>Category Description</td>
-				<td><textarea name="txtCategoryDescription" cols=40 rows=8>{{ c.categories_description }}</textarea></td>
-			</tr>
+  		<div class="form-group">
+    		<div class="col-25"><label>Category Description</label></div>
+    		<div class="col-75"><textarea name="txtCategoryDescription" cols=40 rows=8 class="form-control-lg">{{ c.categories_description }}</textarea></div>
+  		</div>
 
-			<tr>
-				<td>Category Parent Category</td>
-				<td><input type="number" value="{{ c.categories_parentcategory }}" maxlength="8" name="txtCategoryParent"></td>
-			</tr>
+  		<div class="form-group">
+    		<div class="col-25"><label>Category's Parent Category</label></div>
+    		<div class="col-75"><select name="txtCategoryParent" class="form-control-lg">
+					<option value="0">---No Parent Category---</option>
+				{% for ac in allCategories %}
+				{% if ac.categories_id == c.categories_id %}
+					<option disabled>
+						{{ ac.categories_categoryname }}
+					</option>
+				{% else %}
+					<option value="{{ ac.categories_id }}" 
+						{% if ac.categories_categoryname == "No Category Available" %}
+						    disabled
+						{% else %}
+							selected 
+						{% endif %}
+					>
+						{{ ac.categories_categoryname }}
+					</option>
+				{% endif %}	
+				{% endfor %}
+			</select></div>
+  		</div>
 
-			<tr>
-				<td colspan="2"><input type="submit" name="btnUpdateCategory" value="Update Category"></td>
-			</tr>
-		</table>
-	</form><br><br>
-	<a href="http://localhost/cybercom/extra/mvc/admin/dashboard">Dashboard</a>  |  
-	<a href="http://localhost/cybercom/extra/mvc/admin/categories">Manage Category</a><br>
+  		<div class="form-group">
+    		<div class="col-25"><input type="submit" name="btnUpdateCategory" value="Update {{ c.categories_categoryname }}"></div>
+  		</div>
+		</form>
 	</div>
 	{% endfor %}
-	
+
 {% endblock %}

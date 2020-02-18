@@ -5,6 +5,7 @@
  */
 namespace Core;
 
+include_once 'App/Controllers/Admin/Cms/Pages.php';
 
 class Router
 {
@@ -93,7 +94,7 @@ class Router
 		$namespace = "App\Controllers\\";
 
 		if(array_key_exists('namespace', $this->params)){
-			$namespace = "App\Controllers\Admin\\";
+			$namespace .= $this->params['namespace'].'\\';
 		}
 		return $namespace;
 	}

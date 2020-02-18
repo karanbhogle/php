@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %} Update CMS : Admin Dashboard: MVC {% endblock %}
+
+{% block body %}
+
+
+	<h1>Update CMS</h1>
+	<div style="margin: auto; text-align: center;">
+		<a href="{{ base_url }}admin/dashboard">Dashboard</a>  |  
+		<a href="{{ base_url }}admin/cms/pages">Manage CMS Pages</a><br>
+	</div>
+
+	{% for p in allPages %}
+	<form action="{{base_url}}admin/cms/pages/update" method="post" enctype="multipart/form-data">
+	<div style="width: 80%; height: 80%; margin: auto;">
+  		<div class="form-group">
+  			<input type="hidden" name="txtHiddenId" value="{{ p.cms_pages_id }}">
+    		<div class="col-25"><label>Page Title</label></div>
+    		<div class="col-75"><input type="text" name="txtCmsPageTitle" value="{{ p.cms_pages_pagetitle }}" class="form-control"></div>
+  		</div>
+
+		<div class="form-group">
+    		<div class="col-25"><label>Page Status</label></div>
+    		<div class="col-75"><select name="selectCmsPageStatus" class="form-control-lg">
+				<option value="0" {% if p.cms_pages_status =="0" %}
+										selected 
+									{% endif %}
+				>Not Available</option>
+				<option value="1" {% if p.cms_pages_status =="1" %}
+										selected 
+									{% endif %}
+				>Available</option>
+			</select></div>
+  		</div>
+
+  		<div class="form-group">
+    		<div class="col-25"><label>Page Content</label></div>
+    		<div class="col-75"><textarea name="txtCmsPageContent" cols=200 rows=20 class="form-control-lg">{{ p.cms_pages_content }}</textarea></div>
+  		</div>
+
+  		<div class="form-group">
+    		<div class="col-25"><input type="submit" name="btnSubmitCMS" value="Update {{ p.cms_pages_pagetitle }}"></div>
+  		</div>
+		</form>
+	</div>
+	{% endfor %}
+{% endblock %}

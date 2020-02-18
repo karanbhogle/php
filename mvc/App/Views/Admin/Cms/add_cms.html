@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %} Add CMS : Admin Dashboard: MVC {% endblock %}
+
+{% block body %}
+
+	<h1>Add CMS</h1>
+	<div style="margin: auto; text-align: center;">
+		<a href="{{ base_url }}admin/dashboard">Dashboard</a>  |  
+		<a href="{{ base_url }}admin/cms/pages">Manage CMS Pages</a><br>
+	</div>
+
+
+	<form action="add" method="post" enctype="multipart/form-data">
+	<div style="width: 80%; height: 80%; margin: auto;">
+  		<div class="form-group">
+    		<div class="col-25"><label>Page Title</label></div>
+    		<div class="col-75"><input type="text" name="txtCmsPageTitle" required class="form-control"></div>
+  		</div>
+
+		<div class="form-group">
+    		<div class="col-25"><label>Page Status</label></div>
+    		<div class="col-75"><select name="selectCmsPageStatus" class="form-control-lg">
+				    <option value="0">Not Available</option>
+				    <option value="1">Available</option>
+			</select></div>
+  		</div>
+
+  		<div class="form-group">
+    		<div class="col-25"><label>Page Content</label></div>
+    		<div class="col-75"><textarea name="txtCmsPageContent" cols=200 rows=20 class="form-control-lg"></textarea></div>
+  		</div>
+
+  		<div class="form-group">
+    		<div class="col-25"><input type="submit" name="btnSubmitCMS" value="Submit CMS"></div>
+  		</div>
+		</form>
+	</div>
+{% endblock %}

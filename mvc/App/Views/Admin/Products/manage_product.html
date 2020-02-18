@@ -3,9 +3,72 @@
 {% block title %} Manage Product : Admin Dashboard: MVC {% endblock %}
 
 {% block body %}
-	<h1>Manage Product : Admin Dashboard</h1>
-	<nav>
-		<a href="http://localhost/cybercom/extra/mvc/admin/products/add">Add Product</a>
+
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	  	<a class="navbar-brand">Admin Dashboard: MVC</a>
+	    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+	    	<div class="navbar-nav">
+	      		<a class="nav-item nav-link" href="{{ base_url }}admin/categories">Manage Categories</a>
+	      		<a class="nav-item nav-link" href="{{ base_url }}admin/cms/pages">Manage CMS</a>
+	      		<a class="nav-item nav-link" href="{{ base_url }}admin/logout">Logout</a>
+	    	</div>
+	  	</div>
 	</nav>
+
+	<h1></h1>
 	
+
+	<div class="container">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h2>Manage Product</h2></div>
+                    <div class="col-sm-4">
+                        <br><a class="btn btn-info add-new" href="{{ base_url }}admin/products/add" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add Product</a>
+                    </div>
+                </div>
+            </div>
+            <table border="2" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Product Name</th>
+	        			<th scope="col">Product URL Key</th>
+	        			<th scope="col">Product Image</th>
+	        			<th scope="col">Product Category</th>
+	        			<th scope="col">Product Status</th>
+	        			<th scope="col">Product SKU</th>
+	        			<th scope="col">Product Price</th>
+	        			<th scope="col">Product Short Description</th>
+	        			<th scope="col">Product Description</th>
+	   					<th scope="col">Product Stock(in Units)</th>
+	   					<th scope="col">ACTION</th>
+                    </tr>
+                </thead>
+
+	    		{% for product in allProducts %}
+                <tbody>
+                    <tr>
+                        <td>{{ product.products_name }}</td>
+	        			<td>{{ product.products_urlkey }}</td>
+	        			<td>
+	        					<img style="max-width:50%;max-height:50%;" 
+  					 					src="{{base_url}}src/images/products/{{ product.products_image }}" height="70" width="120">
+	    				</td>
+	        			<td>{{ product.category_name }}</td>
+	        			<td>{{ product.products_status }}</td>
+	        			<td>{{ product.products_sku }}</td>
+	        			<td>{{ product.products_price }}</td>
+	        			<td>{{ product.products_shortdescription }}</td>
+	        			<td>{{ product.products_description }}</td>
+	        			<td>{{ product.products_stock }}</td>
+                        <td>
+                            <a class="edit" title="Edit" data-toggle="tooltip" href="{{ base_url }}admin/products/edit/{{ product.products_id }}"><i class="material-icons">&#xE254;</i></a>
+                            <a class="delete" title="Delete" data-toggle="tooltip" href="{{ base_url }}admin/products/delete/{{ product.products_id }}"><i class="material-icons">&#xE872;</i></a>
+                        </td>
+                    </tr>         
+                </tbody>
+	    		{% endfor %}
+            </table>
+        </div>
+    </div>
 {% endblock %}

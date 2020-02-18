@@ -3,22 +3,12 @@
 {% block title %} Admin Login: MVC {% endblock %}
 
 {% block body %}
-	<h1>Admin Login: MVC</h1>
-	<form action="loginChecker" method="post">
-	<table>
-		<tr>
-			<td>Email:</td>
-			<td><input type="text" name="txtEmail">
-		</tr>
-
-		<tr>
-			<td>Password:</td>
-			<td><input type="password" name="txtPassword">
-		</tr>
-
-		<tr>
-			<td><input type="submit" value="Login Now!" name="btnLogin">
-		</tr>	
-	</table>
-	</form>
+	  <div class="wrapper">
+    <form action="loginChecker" method="post" class="form-signin">       
+      <h2 class="form-signin-heading">Login: MVC</h2>
+      <input type="text" name="txtEmail" class="form-control" placeholder="Email Address" required="" autofocus="" />
+      <input type="password" name="txtPassword" class="form-control" placeholder="Password" required=""/>      
+      <input type="submit" value="Login Now!" name="btnLogin"class="btn btn-lg btn-primary btn-block">   
+    </form>
+  </div>
 {% endblock %}

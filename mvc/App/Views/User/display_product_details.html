@@ -61,10 +61,20 @@
 
 
 <script type="text/javascript">
-    
-$("#btnAddToCart").click(function(){
-  alert("Addded to Cart");
-});
+    $("#btnAddToCart").click(function(){
+        var qty = $("#selectCartQuantity").val();
+        var dataString = {quantity:qty};
+
+        $.ajax({
+            type: "POST",
+            url: "AddToCart.php",
+            data: dataString,
+            
+            success: function(result){
+                alert(result);
+            }
+        });
+    });
 
 </script>
 <script type="text/javascript" src="{{ base_url }}App/Views/CSS/cart.js"></script>

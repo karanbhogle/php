@@ -66,8 +66,8 @@ class Home extends \Core\Controller
 	}
 
 	public function loginCheckerAction(){
-		$email = $_POST['txtEmail'];
-		$password = md5($_POST['txtEmail']);
+		@$email = $_POST['txtEmail'];
+		@$password = md5($_POST['txtEmail']);
 
 		if($loggedUser = UserModel::checkUser($email, $password)){
 
@@ -84,6 +84,13 @@ class Home extends \Core\Controller
 			$page = Page::getSpecificPageWithURLKey(@$this->route_params['value']);
 			$allPages = Page::getAllPages();
 		
+			if(isset($_SESSION['currentUser'])){
+				$currentUser = $_SESSION['currentUser'];
+			}
+			else{
+				$currentUser = "";
+			}
+
 			View::renderTemplate("User/home.html",
 			[	
 				'base_url' => $_SESSION['base_url'],
@@ -95,22 +102,25 @@ class Home extends \Core\Controller
 			]);
 		}
 		else{
-			echo "Not a registered user";
+			echo "Please Check your Login Credentials";
 			View::renderTemplate("User/user_login.html", ['currentUser' => ""]);
 		}
 	}
 
 	public function logoutAction(){
 		$_SESSION['loggedUser'] = "";
+		$_SESSION['currentUser'] = "";
 
 		$allCategories = CategoryModel::getAllCategories();
-			$allCategories = CategoryModel::getCategoryWithStatus($allCategories);
-			$allCategories = CategoryModel::getCategoryWithParentCategory($allCategories);
+		$allCategories = CategoryModel::getCategoryWithStatus($allCategories);
+		$allCategories = CategoryModel::getCategoryWithParentCategory($allCategories);
 		
-			$parentCategories = CategoryModel::getAllParentCategories();
+		$parentCategories = CategoryModel::getAllParentCategories();
 
-			$page = Page::getSpecificPageWithURLKey(@$this->route_params['value']);
-			$allPages = Page::getAllPages();
+		$page = Page::getSpecificPageWithURLKey(@$this->route_params['value']);
+		$allPages = Page::getAllPages();
+
+		$currentUser = "";
 
 		View::renderTemplate("User/home.html", 
 		[	

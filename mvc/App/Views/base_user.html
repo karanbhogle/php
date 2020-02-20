@@ -3,8 +3,7 @@
 <head>
 	<title>{% block title %} {% endblock %}</title>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
-  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -39,25 +38,69 @@
   </div>
   {% endfor %}
 
-  <div style="float: right;">
+  <div style="float: right; padding-top: 5px;">
   {% if currentUser == "" %}
-      <a href="{{ base_url }}home/login">Login Now</a>
+      <!-- <a href="{{ base_url }}home/login">Login Now</a> -->
+      <!-- This is a button toggling the modal with the outside close button -->
+      <button class="uk-button uk-button-default uk-margin-small-right" type="button" uk-toggle="target: #loginModal" style="color: white;">Login Now</button>
   {% else %}
-      <a href="{{ base_url }}home/logout">Logout, {{ currentUser }}</a>
+      <a class="uk-button uk-button-default uk-margin-small-right" type="button"style="color: white; padding: 1px" href="{{ base_url }}home/logout">Logout, {{ currentUser }}</a>
   {% endif %}
   </div>
   
-  <div class="search-container">
-    <form action="/action_page.php">
-      <input type="text" placeholder="Search.." name="search">
-      <button type="submit"><i class="fa fa-search"></i></button>
-    </form>
+  <div style="float: right; padding-top: 5px;">
+      <form class="uk-search uk-search-default">
+          <span uk-search-icon></span>
+          <input class="uk-search-input" type="search" placeholder="Search...">
+      </form>
+      
+      <button class="uk-button uk-button-default uk-margin-small-right" type="button" uk-toggle="target: #cartModal" style="color: white;"><i class="fa fa-shopping-cart"></i></button>
   </div>
 </div>
 
 
 {% block body %}
 {% endblock %}
+
+
+<!-- This is the modal with the outside close button -->
+<div id="loginModal" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <button class="uk-modal-close-outside" type="button" uk-close></button>
+        <h2 class="uk-modal-title">Login : E-Commerce</h2>
+        <div class="wrapper">
+          <form action="{{ base_url }}home/loginChecker" method="post" class="form-signin">
+            <input type="text" name="txtEmail" class="form-control" placeholder="Email Address" required="" autofocus="" />
+            <input type="password" name="txtPassword" class="form-control" placeholder="Password" required=""/>      
+            <input type="submit" value="Login Now!" name="btnLogin" class="btn btn-lg btn-primary btn-block">   
+          </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="cartModal" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <button class="uk-modal-close-outside" type="button" uk-close></button>
+        <h2 class="uk-modal-title"><i class="fa fa-shopping-cart"></i> : Your Cart</h2>
+        <div class="wrapper">
+            <table>
+                {% for p in specificProductDetails %}
+                <tr>
+                    <td><strong>{{ p.products_name }}</strong></td>
+                    <td>₹ {{ p.products_price }}</td>
+                    <td><button class="uk-button uk-button-default uk-margin-small-right">Edit</button></td>
+                    <td><button class="uk-button uk-button-default uk-margin-small-right">Delete</button></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
 
 <div class="footerContainer"> 
 	<div class="footer">
@@ -67,5 +110,9 @@
   		{% endfor %}|
   	</div>
 </div>
+
+
+
+
 </body>
 </html>

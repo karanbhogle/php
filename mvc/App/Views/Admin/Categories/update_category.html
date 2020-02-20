@@ -56,7 +56,7 @@
 					<option value="{{ ac.categories_id }}" 
 						{% if ac.categories_categoryname == "No Category Available" %}
 						    disabled
-						{% else %}
+						{% elseif ac.categories_id == c.categories_parentcategory %}
 							selected 
 						{% endif %}
 					>

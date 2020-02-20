@@ -2,18 +2,70 @@
 <html>
 <head>
 	<title>{% block title %} {% endblock %}</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+  </script>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.3.2/dist/css/uikit.min.css" />
+
+<!-- UIkit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.2/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.2/dist/js/uikit-icons.min.js"></script>
+
 	<link rel="stylesheet" type="text/css" href="http://localhost/cybercom/extra/mvc/App/Views/CSS/user.css">
 
+  <link rel="stylesheet" type="text/css" href="http://localhost/cybercom/extra/mvc/App/Views/CSS/user.js">
 </head>
 <body>
+<div class="navbar">
+  <a class="a" href="{{ base_url }}">E-Commerce</a>
+  {% for pc in allParentCategories %}
+  <div class="dropdown">
+    <button class="dropbtn"> {{ pc.categories_categoryname }}
+      <i class="fa fa-caret-down"></i>
+    </button>
+
+    <div class="dropdown-content">
+      {% for c in allCategories %}
+      {% if c.categories_status == "Available" %}
+        {% if pc.categories_categoryname == c.categories_parentcategory %}
+          <a class="a" href="{{ base_url }}category/view/{{ c.categories_urlkey }}">{{ c.categories_categoryname }}</a>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+
+  <div style="float: right;">
+  {% if currentUser == "" %}
+      <a href="{{ base_url }}home/login">Login Now</a>
+  {% else %}
+      <a href="{{ base_url }}home/logout">Logout, {{ currentUser }}</a>
+  {% endif %}
+  </div>
+  
+  <div class="search-container">
+    <form action="/action_page.php">
+      <input type="text" placeholder="Search.." name="search">
+      <button type="submit"><i class="fa fa-search"></i></button>
+    </form>
+  </div>
+</div>
+
 
 {% block body %}
 {% endblock %}
 
-
-
-
-
-
+<div class="footerContainer"> 
+	<div class="footer">
+		2020 © E-Commerce &nbsp;&nbsp;&nbsp;
+		{% for p in allPages %}
+  			| <a class="a1" href="{{ base_url }}home/show/{{ p.cms_pages_urlkey }}">{{ p.cms_pages_pagetitle }}</a> 
+  		{% endfor %}|
+  	</div>
+</div>
 </body>
 </html>

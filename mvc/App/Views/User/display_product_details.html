@@ -1,39 +1,18 @@
 {% extends "base_user.html" %}
 
-{% block title %} E-Commerce: MVC {% endblock %}
+{% block title %} {% for p in specificProductDetails %} {{ p.products_name }} {% endfor %}: MVC {% endblock %}
 
 {% block body %}
 
-<div class="navbar">
-  <a href="{{ base_url }}">E-Commerce</a>
-  
-  {% for pc in allParentCategories %}
-  <div class="dropdown">
-    <button class="dropbtn"> {{ pc.categories_categoryname }}
-      <i class="fa fa-caret-down"></i>
-    </button>
-
-    <div class="dropdown-content">
-      {% for c in allCategories %}
-      {% if pc.categories_categoryname == c.categories_parentcategory %}
-        <a href="{{ base_url }}category/view/{{ c.categories_urlkey }}">{{ c.categories_categoryname }}</a>
-      {% endif %}
-    {% endfor %}
-    </div>
-  </div>
-  {% endfor %}
-</div>
-
-
 {% for p in specificProductDetails %}
-<div style="border: 2px solid black; margin-top: 20px">
+<div style="border: 2px solid black; margin-top: 20px;">
     <div style="float: left; margin: auto; margin-top: 50px; margin-left: 10%;">
         <div>
             <img class="productImageDetail" src="{{ base_url }}src/images/products/{{ p.products_image }}">
         </div>
     </div>
 
-    <div style="width: 50%; float: right; margin: auto; margin-top: 40px; margin-right: 100px;">
+    <div style="width: 50%; float: right; margin: auto; margin-top: 40px; margin-right: 100px; margin-bottom: 80px">
         <div style="border: 1.5px solid black; margin: auto; padding: 40px">
             <div class="form-group">
                 <label style="font-size: 280%; font-weight: bolder;"> {{ p.products_name }} </label>
@@ -41,6 +20,19 @@
             
             <div class="form-group" style="margin-top: 10px;">
                 <label style="font-size: 150%; color: red">₹ {{ p.products_price }} </label>
+                <form method="POST">
+                    <div class="uk-form-width-small" style="width: 160px; margin-top: 10px;">
+                        <label>Choose Quantity</label>
+                        <select id="selectCartQuantity" class="uk-select">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    <button id="btnAddToCart" class="uk-button uk-button-default">Add To Cart</button>
+                    </div>
+                </form>
             </div>
             
             <div class="form-group" style="margin-top: 60px;">
@@ -67,4 +59,13 @@
 </div>
 {% endfor %}
 
+
+<script type="text/javascript">
+    
+$("#btnAddToCart").click(function(){
+  alert("Addded to Cart");
+});
+
+</script>
+<script type="text/javascript" src="{{ base_url }}App/Views/CSS/cart.js"></script>
 {% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 use \Core\View;
 use App\Models\Admin\CategoryModel;
+use App\Models\Admin\Page;
 
 class Category extends \Core\Controller
 {
@@ -14,6 +15,14 @@ class Category extends \Core\Controller
 		$allCategories = CategoryModel::getCategoryWithStatus($allCategories);
 		$allCategories = CategoryModel::getCategoryWithParentCategory($allCategories);
 
+		if(isset($_SESSION['currentUser'])){
+			$currentUser = $_SESSION['currentUser'];
+		}
+		else{
+			$currentUser = "";
+		}
+
+		$allPages = Page::getAllPages();
 		$parentCategories = CategoryModel::getAllParentCategories();
 
 		View::renderTemplate("User/display_products.html",
@@ -21,7 +30,9 @@ class Category extends \Core\Controller
 			'base_url' => $_SESSION['base_url'],
 			'allCategories' => $allCategories,
 			'allParentCategories' => $parentCategories,
-			'allCategoryProducts' => $data
+			'allCategoryProducts' => $data,
+			'allPages' => $allPages,
+			'currentUser' => $currentUser
 		]);
 
 	}

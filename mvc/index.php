@@ -14,15 +14,16 @@ $_SESSION['base_url'] = "http://localhost/cybercom/extra/mvc/";
 
 $router = new Core\Router();
 
-$router->add('', ['controller' => 'home', 'action' => 'index']);
-$router->add('admin/{controller}/{action}', ['namespace' => 'Admin']);
-$router->add('admin/{controller}/{action}/{id:\d+}', ['namespace' => 'Admin']);
-
 $router->add('admin/cms/{controller}', ['namespace' => 'Admin\Cms', 'action'
 => 'index']); $router->add('admin/cms/{controller}/{action}', ['namespace' =>
 'Admin\Cms']);
 $router->add('admin/cms/{controller}/{action}/{id}/{value:\d+}', ['namespace'
 => 'Admin\Cms']);
+
+$router->add('', ['controller' => 'home', 'action' => 'index']);
+$router->add('admin/{controller}/{action}', ['namespace' => 'Admin']);
+$router->add('admin/{controller}/{action}/{id:\d+}', ['namespace' => 'Admin']);
+
 
 $router->add('{controller}/{action}/{value:[a-z0-9-]+}');
 

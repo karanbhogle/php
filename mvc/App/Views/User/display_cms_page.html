@@ -1,0 +1,15 @@
+{% extends "base_user.html" %}
+
+
+{% block title %} {% for p in page %}{{ p.cms_pages_pagetitle }} :{% endfor %} MVC {% endblock %}
+
+
+{% block body %}
+
+{% for p in page %}
+<div style="margin: 20px;">
+  	{{ p.cms_pages_content }}
+</div>
+{% endfor %}
+
+{% endblock %}

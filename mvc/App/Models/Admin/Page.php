@@ -106,6 +106,27 @@ class Page extends \Core\Model
         }
 	}
 
+	public static function getSpecificPageWithURLKey($url_key){
+		try{
+            $db = static::getDB();
+            $stmt = $db->query("SELECT 
+            						cms_pages_id,
+            						cms_pages_pagetitle, 
+            						cms_pages_urlkey, 
+            						cms_pages_status,
+            						cms_pages_content,
+            						cms_pages_createdat,
+            						cms_pages_updatedat  
+            					FROM cms_pages WHERE cms_pages_urlkey='$url_key'");
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $results;
+        }
+        catch(PDOException $e){
+            echo $e->getMessage();
+        }
+	}
+
 	public static function updatePage($dataArray){
 		extract($dataArray);
 		$urlkey = Page::getPageURLKey($txtCmsPageTitle);

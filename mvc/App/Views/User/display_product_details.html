@@ -1,0 +1,70 @@
+{% extends "base_user.html" %}
+
+{% block title %} E-Commerce: MVC {% endblock %}
+
+{% block body %}
+
+<div class="navbar">
+  <a href="{{ base_url }}">E-Commerce</a>
+  
+  {% for pc in allParentCategories %}
+  <div class="dropdown">
+    <button class="dropbtn"> {{ pc.categories_categoryname }}
+      <i class="fa fa-caret-down"></i>
+    </button>
+
+    <div class="dropdown-content">
+      {% for c in allCategories %}
+      {% if pc.categories_categoryname == c.categories_parentcategory %}
+        <a href="{{ base_url }}category/view/{{ c.categories_urlkey }}">{{ c.categories_categoryname }}</a>
+      {% endif %}
+    {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+
+{% for p in specificProductDetails %}
+<div style="border: 2px solid black; margin-top: 20px">
+    <div style="float: left; margin: auto; margin-top: 50px; margin-left: 10%;">
+        <div>
+            <img class="productImageDetail" src="{{ base_url }}src/images/products/{{ p.products_image }}">
+        </div>
+    </div>
+
+    <div style="width: 50%; float: right; margin: auto; margin-top: 40px; margin-right: 100px;">
+        <div style="border: 1.5px solid black; margin: auto; padding: 40px">
+            <div class="form-group">
+                <label style="font-size: 280%; font-weight: bolder;"> {{ p.products_name }} </label>
+            </div>
+            
+            <div class="form-group" style="margin-top: 10px;">
+                <label style="font-size: 150%; color: red">₹ {{ p.products_price }} </label>
+            </div>
+            
+            <div class="form-group" style="margin-top: 60px;">
+                <label style="font-size: 100%;">
+                    {% if p.products_status == "Available" %}
+                      <label style="font-size: 100%; color: green">Hurry! Only {{ p.products_stock }} Units {{ p.products_status }}! 
+                      </label>
+                    {% elseif p.products_status == "Not Available" %}
+                      <label style="font-size: 100%; color: red">(Currently {{ p.products_status }})
+                      </label>
+                    {% endif %}
+                </label>
+            </div>
+
+            <div class="form-group" style="margin-top: 10px;">
+                <label style="font-size: 100%;">{{ p.products_description }} </label>
+            </div>
+
+            <div class="form-group" style="margin-top: 10px;">
+                <label style="font-size: 100%;">{{ p.products_shortdescription }} </label>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

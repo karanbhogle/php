@@ -2,21 +2,21 @@
 
 namespace App\Controllers\Admin;
 use \Core\View;
-use App\Models\Admin\Product;
-use App\Models\Admin\Category;
+use App\Models\Admin\ProductModel;
+use App\Models\Admin\CategoryModel;
 
 class Products extends \Core\Controller
 {
 	public function addAction(){
 		if(isset($_POST['btnSubmitProduct'])){
-			if($txtProductName = Product::addProduct($_POST)){
+			if($txtProductName = ProductModel::addProduct($_POST)){
 				echo $txtProductName." inserted successfully";
 			}
 			else{
 				echo "Product already exists!";
 			}
 		}
-		$categories = Category::getAllCategories();
+		$categories = CategoryModel::getAllCategories();
 		View::renderTemplate('Admin/Products/add_product.html',
 		[
 			'name' => 'static',
@@ -28,9 +28,9 @@ class Products extends \Core\Controller
 	public function edit(){
 		$toBeUpdated = $this->route_params['id'];
 		
-		$products = Product::getSpecificProduct($toBeUpdated);
-		$categories = Category::getCategoryNames();
-		$selectedCategories = Category::getSelectedCategories($toBeUpdated);
+		$products = ProductModel::getSpecificProduct($toBeUpdated);
+		$categories = CategoryModel::getCategoryNames();
+		$selectedCategories = CategoryModel::getSelectedCategories($toBeUpdated);
 
 		View::renderTemplate("Admin/Products/update_product.html",
 		[
@@ -45,12 +45,12 @@ class Products extends \Core\Controller
 	public function delete(){
 		$toBeDeleted = $this->route_params['id'];
 		
-		Product::deleteProduct($toBeDeleted);
+		ProductModel::deleteProduct($toBeDeleted);
 		header("location:http://localhost/cybercom/extra/mvc/admin/products");
 	}
 
 	public function update(){	
-		if($txtProductName = Product::updateProduct($_POST)){
+		if($txtProductName = ProductModel::updateProduct($_POST)){
 			echo $txtProductName." Updated successfully";
 		}
 		else{

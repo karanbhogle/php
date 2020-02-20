@@ -2,20 +2,20 @@
 
 namespace App\Controllers\Admin;
 use \Core\View;
-use App\Models\Admin\Category;
+use App\Models\Admin\CategoryModel;
 
 class Categories extends \Core\Controller
 {
 	public function addAction(){
 		if(isset($_POST['btnSubmitCategory'])){
-			if($txtCategoryName = Category::addCategory($_POST)){
+			if($txtCategoryName = CategoryModel::addCategory($_POST)){
 				echo $txtCategoryName." inserted successfully";
 			}
 			else{
 				echo "Category already exists!";
 			}
 		}
-		if(!$categoriesNames = Category::getCategoryNames()){
+		if(!$categoriesNames = CategoryModel::getCategoryNames()){
 			$categoriesNames[0]['categories_id'] = 0;
 			$categoriesNames[0]['categories_categoryname'] = 'No Category Available';
 		}
@@ -31,8 +31,8 @@ class Categories extends \Core\Controller
 	public function edit(){
 		$toBeUpdated = $this->route_params['id'];
 		
-		$categories = Category::getSpecificCategories($toBeUpdated);
-		if(!$categoriesNames = Category::getCategoryNames()){
+		$categories = CategoryModel::getSpecificCategories($toBeUpdated);
+		if(!$categoriesNames = CategoryModel::getCategoryNames()){
 			$categoriesNames[0]['categories_id'] = 0;
 			$categoriesNames[0]['categories_categoryname'] = 'No Category Available';
 		}
@@ -48,13 +48,13 @@ class Categories extends \Core\Controller
 	public function delete(){
 		$toBeDeleted = $this->route_params['id'];
 		
-		Category::deleteCategory($toBeDeleted);
+		CategoryModel::deleteCategory($toBeDeleted);
 		header("location:http://localhost/cybercom/extra/mvc/admin/categories");
 	}
 
 	public function update(){
 		
-		if($txtCategoryName = Category::updateCategory($_POST)){
+		if($txtCategoryName = CategoryModel::updateCategory($_POST)){
 			echo $txtCategoryName." Updated successfully";
 		}
 		else{

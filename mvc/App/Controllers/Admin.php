@@ -2,8 +2,8 @@
 
 namespace App\Controllers;
 use \Core\View;
-use App\Models\Admin\Category;
-use App\Models\Admin\Product;
+use App\Models\Admin\CategoryModel;
+use App\Models\Admin\ProductModel;
 
 class Admin extends \Core\Controller
 {
@@ -55,8 +55,8 @@ class Admin extends \Core\Controller
 
 	public function products(){
 		if(@$_SESSION['user'] === "admin"){
-			$products = Product::getAllProducts();
-			$products = Product::getProductWithStatus($products);
+			$products = ProductModel::getAllProducts();
+			$products = ProductModel::getProductWithStatus($products);
 
 			View::renderTemplate("Admin/Products/manage_product.html",
 			[
@@ -74,9 +74,9 @@ class Admin extends \Core\Controller
 
 	public function categories(){
 		if(@$_SESSION['user'] === "admin"){
-			$categories = Category::getAllCategories();
-			$categories = Category::getCategoryWithStatus($categories);
-			$categories = Category::getCategoryWithParentCategory($categories);
+			$categories = CategoryModel::getAllCategories();
+			$categories = CategoryModel::getCategoryWithStatus($categories);
+			$categories = CategoryModel::getCategoryWithParentCategory($categories);
 
 			View::renderTemplate("Admin/Categories/manage_category.html",
 			[

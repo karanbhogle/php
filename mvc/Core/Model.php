@@ -10,9 +10,8 @@ use PDO;
 abstract class Model
 {
 	protected static function getDB(){
-
 			$host = "localhost";
-			$dbname = "ecommerce";
+			$dbname = "ecommerce2";
 			$username = "root";
 			$password = "";
 		try{

@@ -1,0 +1,40 @@
+{% extends "base_user.html" %}
+
+{% block title %} E-Commerce: MVC {% endblock %}
+
+{% block body %}
+
+<div class="navbar">
+  <a href="{{ base_url }}">E-Commerce</a>
+  
+  {% for pc in allParentCategories %}
+  <div class="dropdown">
+    <button class="dropbtn"> {{ pc.categories_categoryname }}
+      <i class="fa fa-caret-down"></i>
+    </button>
+
+    <div class="dropdown-content">
+      {% for c in allCategories %}
+      {% if pc.categories_categoryname == c.categories_parentcategory %}
+        <a href="{{ base_url }}category/view/{{ c.categories_urlkey }}">{{ c.categories_categoryname }}</a>
+      {% endif %}
+    {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% for p in allCategoryProducts %}
+<div class="productContainer">
+  <a href="{{ base_url }}product/view/{{ p.products_urlkey }}">
+    <div class="productPicture">
+      <img class="productImage" src="{{ base_url }}src/images/products/{{ p.products_image }}">
+    </div>
+  </a>
+  <div class="productName"><label>{{ p.products_name }}</label></div>
+  <div class="product"><label>₹ {{ p.products_price }}</label></div>
+  <div class="product"><label>In Stock: {{ p.products_stock }} Units</label></div>
+</div>
+{% endfor %}
+
+{% endblock %}

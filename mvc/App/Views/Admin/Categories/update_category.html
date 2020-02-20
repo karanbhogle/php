@@ -46,7 +46,7 @@
   		<div class="form-group">
     		<div class="col-25"><label>Category's Parent Category</label></div>
     		<div class="col-75"><select name="txtCategoryParent" class="form-control-lg">
-					<option value="0">---No Parent Category---</option>
+					<option value="NULL">---No Parent Category---</option>
 				{% for ac in allCategories %}
 				{% if ac.categories_id == c.categories_id %}
 					<option disabled>

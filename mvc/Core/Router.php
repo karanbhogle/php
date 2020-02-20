@@ -19,12 +19,16 @@ class Router
 		$route = '/^'.$route.'$/i';
 
 		$this->routes[$route] = $params;
+
+		// echo "<pre>";
+		// print_r($this->routes);
+		// echo "</pre>";
 	}
 
 	
 	public function dispatch($url){
         $url = $this->removeQueryStringVariables($url);
-
+        
         if($this->match($url)){
             $controller = $this->params['controller'];
             $controller = $this->convertToStudlyCaps($controller);

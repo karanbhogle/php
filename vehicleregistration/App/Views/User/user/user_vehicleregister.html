@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vehicle Service Registration</title>
+</head>
+<body>
+	<h1>Vehicle Service Registration</h1>
+	<table>
+		<form action="{{ base_url }}register/vehicledata" method="POST">
+		<tr>
+			<td>Title</td>
+			<td><input type="text" name="vehicle[txtTitle]"></td>
+		</tr>
+
+		<tr>
+			<td>Vehicle Number</td>
+			<td><input type="text" name="vehicle[txtVehicleNumber]"></td>
+		</tr>
+
+		<tr>
+			<td>User License Number</td>
+			<td><input type="text" name="vehicle[txtUserLicenceNumber]"></td>
+		</tr>
+
+		<tr>
+			<td>Date</td>
+			<td><input type="date" id="datepicker" name="vehicle[date]"></td>
+		</tr>
+
+		<tr>
+			<td>Timeslot</td>
+			<td>
+				<select name="vehicle[timeslot]">
+					<option value="9-10">9-10</option>
+					<option value="10-11">10-11</option>
+					<option value="11-12">11-12</option>
+					<option value="12-1">12-1</option>
+					<option value="1-2">1-2</option>
+					<option value="2-3">2-3</option>
+					<option value="3-4">3-4</option>
+					<option value="4-5">4-5</option>
+					<option value="5-6">5-6</option>
+				</select>
+			</td>
+		</tr>
+
+		<tr>
+			<td>Vehicle Issue</td>
+			<td><input type="text" name="vehicle[txtVehiceIssue]"></td>
+		</tr>
+
+		<tr>
+			<td>Service Center</td>
+			<td><input type="text" name="vehicle[txtServiceCenter]"></td>
+		</tr>
+
+		<tr>
+			<td><input type="submit" value="Submit" name="btnRegisterVehicle"></td>
+			<td><a href="{{ base_url }}home">Back to Homepage</a></td>
+		</tr>
+	</form>
+	</table>
+
+
+	<script type="text/javascript">
+		var today = new Date();
+
+		$("#datepicker").datepicker({
+		    changeMonth: true,
+		    changeYear: true,
+		    minDate: today // set the minDate to the today's date
+		    // you can add other options here
+		});
+
+	</script>
+</body>
+</html>

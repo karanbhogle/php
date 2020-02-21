@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block title %} {% endblock %}</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.3.2/dist/css/uikit.min.css" />
+
+<!-- UIkit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.2/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.2/dist/js/uikit-icons.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="http://localhost/cybercom/extra/mvc/App/Views/CSS/user.css">
+
+  <link rel="stylesheet" type="text/css" href="http://localhost/cybercom/extra/mvc/App/Views/CSS/user.js">
+</head>
+<body>
+<div class="navbar">
+  <a class="a" href="{{ base_url }}">E-Commerce</a>
+  {% for pc in allParentCategories %}
+  <div class="dropdown">
+    <button class="dropbtn"> {{ pc.categories_categoryname }}
+      <i class="fa fa-caret-down"></i>
+    </button>
+
+    <div class="dropdown-content">
+      {% for c in allCategories %}
+      {% if c.categories_status == "Available" %}
+        {% if pc.categories_categoryname == c.categories_parentcategory %}
+          <a class="a" href="{{ base_url }}category/view/{{ c.categories_urlkey }}">{{ c.categories_categoryname }}</a>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+
+  <div style="float: right; padding-top: 5px;">
+  {% if currentUser == "" %}
+      <!-- <a href="{{ base_url }}home/login">Login Now</a> -->
+      <!-- This is a button toggling the modal with the outside close button -->
+      <button class="uk-button uk-button-default uk-margin-small-right" type="button" uk-toggle="target: #loginModal" style="color: white;">Login Now</button>
+  {% else %}
+      <a class="uk-button uk-button-default uk-margin-small-right" type="button"style="color: white; padding: 1px" href="{{ base_url }}home/logout">Logout, {{ currentUser }}</a>
+  {% endif %}
+  </div>
+  
+  <div style="float: right; padding-top: 5px;">
+      <form class="uk-search uk-search-default">
+          <span uk-search-icon></span>
+          <input class="uk-search-input" type="search" placeholder="Search...">
+      </form>
+      
+      <button class="uk-button uk-button-default uk-margin-small-right" type="button" uk-toggle="target: #cartModal" style="color: white;"><i class="fa fa-shopping-cart"></i></button>
+  </div>
+</div>
+
+
+{% block body %}
+{% endblock %}
+
+
+<!-- This is the modal with the outside close button -->
+<div id="loginModal" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <button class="uk-modal-close-outside" type="button" uk-close></button>
+        <h2 class="uk-modal-title">Login : E-Commerce</h2>
+        <div class="wrapper">
+          <form action="{{ base_url }}home/loginChecker" method="post" class="form-signin">
+            <input type="text" name="txtEmail" class="form-control" placeholder="Email Address" required="" autofocus="" />
+            <input type="password" name="txtPassword" class="form-control" placeholder="Password" required=""/>      
+            <input type="submit" value="Login Now!" name="btnLogin" class="btn btn-lg btn-primary btn-block">   
+          </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="cartModal" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <button class="uk-modal-close-outside" type="button" uk-close></button>
+        <h2 class="uk-modal-title"><i class="fa fa-shopping-cart"></i> : Your Cart</h2>
+        <div class="wrapper">
+            <table>
+                {% for p in specificProductDetails %}
+                <tr>
+                    <td><strong>{{ p.products_name }}</strong></td>
+                    <td>₹ {{ p.products_price }}</td>
+                    <td><button class="uk-button uk-button-default uk-margin-small-right">Edit</button></td>
+                    <td><button class="uk-button uk-button-default uk-margin-small-right">Delete</button></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="footerContainer"> 
+	<div class="footer">
+		2020 © E-Commerce &nbsp;&nbsp;&nbsp;
+		{% for p in allPages %}
+  			| <a class="a1" href="{{ base_url }}home/show/{{ p.cms_pages_urlkey }}">{{ p.cms_pages_pagetitle }}</a> 
+  		{% endfor %}|
+  	</div>
+</div>
+
+
+
+
+</body>
+</html>

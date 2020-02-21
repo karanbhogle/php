@@ -21,6 +21,7 @@
             <div class="form-group" style="margin-top: 10px;">
                 <label style="font-size: 150%; color: red">₹ {{ p.products_price }} </label>
                 <form method="POST">
+                    
                     <div class="uk-form-width-small" style="width: 160px; margin-top: 10px;">
                         <label>Choose Quantity</label>
                         <select id="selectCartQuantity" class="uk-select">
@@ -63,7 +64,11 @@
 <script type="text/javascript">
     $("#btnAddToCart").click(function(){
         var qty = $("#selectCartQuantity").val();
-        var dataString = {quantity:qty};
+        var user_id = '{{ loggedUser[0]['user_id'] }}';
+        var product_id = '{{ specificProductDetails[0]['products_id'] }}';
+        var product_price = '{{ specificProductDetails[0]['products_price'] }}';
+        var dataString = {quantity:qty, user: user_id, prod_id: product_id, prod_price: product_price};
+        
 
         $.ajax({
             type: "POST",

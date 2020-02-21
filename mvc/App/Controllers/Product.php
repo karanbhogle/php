@@ -27,6 +27,10 @@ class Product extends \Core\Controller
 			$currentUser = "";
 		}
 
+		if(!isset($_SESSION['loggedUser'])){
+			$_SESSION['loggedUser'][0]['user_id'] = 0;
+		}
+
 		View::renderTemplate("User/display_product_details.html",
 		[	
 			'base_url' => $_SESSION['base_url'],
@@ -34,7 +38,8 @@ class Product extends \Core\Controller
 			'allParentCategories' => $parentCategories,
 			'specificProductDetails' => $data,
 			'allPages' => $allPages,
-			'currentUser' => $currentUser
+			'currentUser' => $currentUser,
+			'loggedUser' => @$_SESSION['loggedUser']
 		]);
 	}
 

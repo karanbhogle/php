@@ -5,7 +5,7 @@
 {% block body %}
 
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-	  	<a class="navbar-brand">Admin Dashboard: MVC</a>
+	  	<a class="navbar-brand" href="{{ base_url }}admin/dashboard">Admin Dashboard: MVC</a>
 	    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 	    	<div class="navbar-nav">
 	      		<a class="nav-item nav-link" href="{{ base_url }}admin/categories">Manage Categories</a>
@@ -38,8 +38,8 @@
 	        			<th scope="col">Product Status</th>
 	        			<th scope="col">Product SKU</th>
 	        			<th scope="col">Product Price</th>
-	        			<th scope="col">Product Short Description</th>
-	        			<th scope="col">Product Description</th>
+	        			<!-- <th scope="col">Product Short Description</th>
+	        			<th scope="col">Product Description</th> -->
 	   					<th scope="col">Product Stock(in Units)</th>
 	   					<th scope="col">ACTION</th>
                     </tr>
@@ -58,8 +58,8 @@
 	        			<td>{{ product.products_status }}</td>
 	        			<td>{{ product.products_sku }}</td>
 	        			<td>{{ product.products_price }}</td>
-	        			<td>{{ product.products_shortdescription }}</td>
-	        			<td>{{ product.products_description }}</td>
+	        			<!-- <td>{{ product.products_shortdescription }}</td> -->
+	        			<!-- <td>{{ product.products_description }}</td> -->
 	        			<td>{{ product.products_stock }}</td>
                         <td>
                             <a class="edit" title="Edit" data-toggle="tooltip" href="{{ base_url }}admin/products/edit/{{ product.products_id }}"><i class="material-icons">&#xE254;</i></a>

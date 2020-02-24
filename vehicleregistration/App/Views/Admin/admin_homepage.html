@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>User Homepage: Vehicle Registration</title>
+	<title>Admin Homepage: Vehicle Registration</title>
 </head>
 <body>
-	<a href="{{ base_url }}register/vehicle">Add Vehicle Service Registration</a>
-	<a href="{{ base_url }}register/logout">Logout</a>
 	<table border="2">
 			<tr>
+				<th></th>
 				<th>Registrations Title</th>
 				<th>Registrations Vehicle Number</th>
 				<th>Registrations Licence Number</th>
@@ -18,9 +17,12 @@
 				<th>Registrations Status</th>
 				<th>Registrations Created On</th>
 				<th>Status Updated On</th>
+				<th>ACTION</th>
 			</tr>
+		<form action="{{ base_url }}updateMultiple" method="POST"></form>				
 		{% for vs in allVehicleServices %}
 			<tr>
+				<td><input type="checkbox" name="statusCheckbox[]" value="{{ vs.service_registrations_id }}">
 				<td>{{ vs.service_registrations_title }}</td>
 				<td>{{ vs.service_registrations_vehiclenumber }}</td>
 				<td>{{ vs.service_registrations_userlicencenumber }}</td>
@@ -31,8 +33,12 @@
 				<td>{{ vs.service_registrations_status }}</td>
 				<td>{{ vs.service_registrations_createddate }}</td>
 				<td>{{ vs.service_registrations_updateddate }}</td>
+				<td><a href="{{ base_url }}home/update/{{ vs.service_registrations_id }}">Update</a>
 			</tr>
 		{% endfor %}
 	</table>
+	<input type="submit" name="btnUpdateMultiple" value="Update Selected">
+	</form>	
+
 </body>
 </html>

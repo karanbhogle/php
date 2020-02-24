@@ -27,6 +27,44 @@ class UserModel extends \Core\Model
         }
 	}
 
+
+    public static function isTimeslotAvailable($date, $timeslot){
+        try{
+            $db = static::getDB();
+            $timeslotQuery = "SELECT 
+                                * 
+                            FROM service_registrations WHERE service_registrations_date = '$date' AND service_registrations_timeslot = '$timeslot' ";
+            $stmt = $db->query($timeslotQuery);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if($stmt->rowCount() < 3){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        catch(PDOException $e){
+            echo $e->getMessage();
+        }
+    }
+
+    public static function updateVehicleServiceStatus($updateId, $status){
+        try{
+            $db = static::getDB();
+
+            $updateQuery = "UPDATE service_registrations 
+                            SET 
+                                service_registrations_status = '".$status."' 
+                            WHERE service_registrations_id = ".$updateId;
+
+            $db->exec($updateQuery);
+
+        }
+        catch(PDOException $e){
+            echo $e->getMessage();
+        }
+    }
+
 	public static function isExistingVehicleNumber($vehicleNumber){
 		try{
             $db = static::getDB();
@@ -68,7 +106,39 @@ class UserModel extends \Core\Model
         }
 	}
 
+    public static function getSpecificVehicleServicesForUpdate($toBeUpdated){
+        try{
+            $db = static::getDB();
+            $existingVehicleQuery = "SELECT 
+                                * 
+                            FROM service_registrations WHERE service_registrations_id = '".$toBeUpdated."'";
+            $stmt = $db->query($existingVehicleQuery);
 
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $results;
+            
+        }
+        catch(PDOException $e){
+            echo $e->getMessage();
+        }
+    }
+
+    public static function getAllVehicleServices(){
+        try{
+            $db = static::getDB();
+            $existingVehicleQuery = "SELECT 
+                                * 
+                            FROM service_registrations";
+            $stmt = $db->query($existingVehicleQuery);
+
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $results;
+            
+        }
+        catch(PDOException $e){
+            echo $e->getMessage();
+        }
+    }
 
 	public static function insertUserData($user){
 		try{

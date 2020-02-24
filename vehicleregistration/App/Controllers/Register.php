@@ -15,12 +15,36 @@ class Register extends \Core\Controller
 	}
 
 	public function vehicle(){
+
 		View::renderTemplate("User/user/user_vehicleregister.html", [
 				'base_url' => $_SESSION['base_url']
 		]);
 	}
 
+	public function checkTimeslot(){
+		if(isset($_SESSION['currentUser'])){
+			if(UserModel::isTimeslotAvailable(@$_POST['vehicle']['date'], @$_POST['vehicle']['timeslot'])){
+					$this->vehicledata();
+			}
+			else{
+				echo "Choose Another Timeslot/Date";
+				$vehicle = $_POST['vehicle'];
 
+				View::renderTemplate("User/user/user_vehicleregister.html", [
+					'base_url' => $_SESSION['base_url']
+				]);
+			}
+		}
+		else{
+			header("location:".$_SESSION['base_url']);
+		}
+	}
+
+
+	public function updateVehicleServices(){
+		UserModel::updateVehicleServiceStatus($_POST['vehicle']['updateId'], $_POST['vehicle']['Status']);
+		header("location:".$_SESSION['base_url']."admin");
+	}
 
 
 
@@ -34,6 +58,7 @@ class Register extends \Core\Controller
 
 			if(UserModel::isExistingUser($user['user_email'], $user['user_password'])){
 				echo "User already exists with this email.";
+				
 				View::renderTemplate("User/user/user_register.html", [
 					'base_url' => $_SESSION['base_url']
 				]);
@@ -46,11 +71,16 @@ class Register extends \Core\Controller
 		}
 		elseif($_SESSION['vehicleUser'] !== ""){
 			echo $_SESSION['base_url'];
-			header("location:".$_SESSION['base_url']);
+			$allVehicleServices = UserModel::getSpecificVehicleServices();
+
+				View::renderTemplate("User/user/user_homepage.html", [
+					'base_url' => $_SESSION['base_url'],
+					'allVehicleServices' => $allVehicleServices
+				]);
 		}
 		else{
 			header("location:".$_SESSION['base_url']);
-		}
+		}	
 	}
 
 
@@ -66,8 +96,11 @@ class Register extends \Core\Controller
 			}
 			else{
 				UserModel::insertVehicleData($vehicle);
+				$allVehicleServices = UserModel::getSpecificVehicleServices();
+
 				View::renderTemplate("User/user/user_homepage.html", [
-					'base_url' => $_SESSION['base_url']
+					'base_url' => $_SESSION['base_url'],
+					'allVehicleServices' => $allVehicleServices
 				]);
 			}
 		}
@@ -135,6 +168,11 @@ class Register extends \Core\Controller
                       	$_POST['address']['txtZipCode'], 
                       	$_POST['address']['txtCountry']];
     	return array_combine($addressKeys, $addressValues);
+	}
+
+	public function logout(){
+		$_SESSION['currentUser'] = NULL;
+		header("location:".$_SESSION['base_url']);
 	}
 }
 

@@ -46,14 +46,39 @@ class Adapter
         return $result = $this->query($this->getQuery());
     }
 
+    public function fetchAll($fetchAllQuery){
+        $this->setQuery($fetchAllQuery);
+        return $result = $this->query($this->getQuery());
+    }
+
+    public function fetchPairs($fetchPairsQuery){
+        $this->setQuery($fetchPairsQuery);
+        $result = $this->query($this->getQuery());
+
+        $keyValueResultArray = [];
+        while($row = $result->fetch_assoc()){
+            $keyValueResultArray[$row['user_id']] = $row['user_firstname']." ".$row['user_lastname'];
+        }
+        return $keyValueResultArray;
+    }
+
     public function query($query){
-        if(!$this->getConnect()){
+        if(!$this->isConnected()){
             $this->connect();
         }
         return $this->getConnect()->query($query);
     }
 
+    public function isConnected(){
+        if(!$this->getConnect()){
+            return false;
+        }
+        return true;
+    }
 
+
+
+    //LIST OF GETTERs AND SETTERs
 
     public function setConfig($config){
         $this->config = array_merge($this->config, $config);
@@ -93,6 +118,8 @@ $myDbConfig = [
 
 $adapter->connect($myDbConfig);
 
+
+
 $insertQuery = "INSERT INTO `user`(`user_firstname`, `user_lastname`, `user_email`) VALUES('dumb', 'kumar', 'dumb@mail.com')";
 // echo $last_id = $adapter->insert($insertQuery);
 
@@ -106,10 +133,22 @@ $fetchOneQuery = "SELECT * from `user`";
 // echo "The Number of Rows in `user` table is ".$adapter->fetchOne($fetchOneQuery);
 
 $fetchRowQuery = "SELECT * FROM `user` WHERE `user_id` = 2";
-$result = $adapter->fetchRow($fetchRowQuery);
-for($row = mysqli_fetch_assoc($result)){
+/* $result = $adapter->fetchRow($fetchRowQuery);
+while($row = $result->fetch_assoc()){
     echo "User is ".$row['user_firstname']." ".$row['user_lastname'];
-}
+} */
 
+$fetchAllQuery = "SELECT * from `user`";
+// $result = $adapter->fetchAll($fetchAllQuery);
+// echo "USERS ARE:<br>";
+// while($row = $result->fetch_assoc()){
+//     echo $row['user_firstname']." ".$row['user_lastname']."<br>";
+// }
+
+
+$fetchPairsQuery = "SELECT `user_id`, `user_firstname`, `user_lastname` FROM `user`";
+// $result = $adapter->fetchPairs($fetchPairsQuery);
+// echo '<pre>';
+// print_r($result);
 
 ?>

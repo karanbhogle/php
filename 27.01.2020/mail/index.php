@@ -17,7 +17,7 @@ if(isset($_POST['btnSubmit'])){
         $mail->Port = 587;                                    // Set the SMTP port
         $mail->SMTPAuth = true;                               // Enable SMTP authentication
         $mail->Username = 'karanbhoglenow@gmail.com';                // SMTP username
-        $mail->Password = 'ke54628epReal8171ms';                  // SMTP password
+        $mail->Password = '*****';                  // SMTP password
         $mail->SMTPSecure = 'tls';                            // Enable encryption, 'ssl' also accepted
 
         $mail->From = 'karanbhoglenow@gmail.com';
